@@ -14,14 +14,15 @@ class DialogIndex extends React.Component {
                 <ul className="list-group">
                     {this.props.dialogs.map((dialog, i) => (
                         <li className="list-group-item" key={i}>
-                            <Link to={urls.dialogEdit(dialog.id)}>
-                                {dialog.userText}
-                            </Link>
 
                             <ButtonWithModal onConfirm={(onClose) => {onClose(); this.props.onRemoveDialog(dialog.id)}}
                                 className="btn btn-xs btn-danger pull-right" label="✖" altLabel="Verwijderen">
                                 Weet je zeker dat je de dialoog '<strong>{dialog.userText}</strong>' wilt verwijderen?
                             </ButtonWithModal>
+                            <Link to={urls.dialogEdit(dialog.id)}>
+                                {dialog.userText}
+                            </Link>
+
                         </li>
                     ))}
                 </ul>

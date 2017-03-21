@@ -1,7 +1,7 @@
 import xhr from "xhr";
 import ActionTypes from "../action-types";
 
-const addDialog = (userText) => (dispatch) =>
+const addDialog = (userText, next) => (dispatch) =>
     xhr({
         method: 'POST',
         url: '/add-dialog',
@@ -14,6 +14,7 @@ const addDialog = (userText) => (dispatch) =>
             type: ActionTypes.RECEIVE_DIALOGS,
             dialogs: JSON.parse(body)
         });
+        next(resp.headers['x-uuid']);
     });
 
 
@@ -41,4 +42,19 @@ const removeDialog = (uuid) => (dispatch) =>
         });
     });
 
-export { addDialog, fetchDialogs, removeDialog }
+const togglePartOfMatchPhrase = (uuid, word) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/${uuid}/toggle-phrase-part`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({word: word})
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
+export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase }

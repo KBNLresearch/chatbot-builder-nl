@@ -1,11 +1,33 @@
-const fs = require("fs");
-const uuid = require("uuid");
+const fs = require("fs"),
+    uuid = require("uuid"),
+    rp = require("request-promise");
+
 const dialogFile = "./files/dialogs.json";
 
-const makeNewDialog = (userText) => ({
-    id: uuid(),
-    userText: userText
-});
+const makeNewDialog = (userText, frogResponse) => {
+
+    const frogAnalysis = frogResponse
+        .split("\n")
+        .filter(row => row.trim().length > 0)
+        .map(wordAnalysis => {
+            const [_i, exact, norm, _j, form, _a, _b, _c, _d, pos] = wordAnalysis.split("\t");
+            return {
+                exact: exact,
+                norm: norm,
+                form: form,
+                pos: pos
+            }
+        });
+
+    return {
+        id: uuid(),
+        userText: userText,
+        frogAnalysis: frogAnalysis,
+        matchPhrase: frogAnalysis.length > 1 ? frogAnalysis
+            .filter(f => f.form.indexOf("N") === 0)
+            .map(f => f.exact) : frogAnalysis[0].exact
+    };
+};
 
 const saveDialogs = (dialogs) => {
     fs.writeFileSync(dialogFile, JSON.stringify(dialogs));
@@ -20,12 +42,19 @@ const listDialogs = () => {
 };
 
 
-const addDialog = (userText) => {
+const addDialog = (userText, next) => {
     const dialogs = listDialogs();
 
-    dialogs.push(makeNewDialog(userText));
 
-    saveDialogs(dialogs);
+    rp.get({
+        uri: `${process.env.FROG}?text=${encodeURIComponent(userText)}`,
+    }).then(frogAnalysis => {
+        const newDialog = makeNewDialog(userText, frogAnalysis);
+        dialogs.push(newDialog);
+        saveDialogs(dialogs);
+        next(newDialog.id);
+    });
+
 };
 
 const removeDialog = (id) => {
@@ -34,5 +63,21 @@ const removeDialog = (id) => {
     saveDialogs(dialogs.filter(dialog => dialog.id !== id));
 };
 
+const togglePhrasePart = (id, word) => {
+    const dialogs = listDialogs();
 
-module.exports = { addDialog, listDialogs, removeDialog }
+    saveDialogs(dialogs.map(dialog => (
+       dialog.id === id
+           ? Object.assign(
+               dialog, {
+               matchPhrase: dialog.matchPhrase.indexOf(word) > -1
+                   ? dialog.matchPhrase.filter(w => w !== word)
+                   : dialog.matchPhrase.concat(word)
+           })
+       : dialog
+    )));
+
+
+};
+
+module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart }
