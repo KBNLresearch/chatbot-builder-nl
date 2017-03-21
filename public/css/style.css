@@ -1,0 +1,29 @@
+.pagination > li  > a {
+    cursor: pointer
+}
+
+.list-group-item a {
+    cursor: pointer;
+}
+
+.list-group-item.active a {
+    color: white;
+    cursor: default;
+}
+
+@media print {
+    .breadcrumb {
+        display: none;
+    }
+    .collapsed-panel {
+        display: none;
+    }
+
+    a[href]:after {
+        content: none !important;
+    }
+
+    .glyphicon {
+        display: none;
+    }
+}
