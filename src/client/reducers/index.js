@@ -1,14 +1,7 @@
-import ActionTypes from "../action-types";
-
-const initialState = {
-
-};
+import {combineReducers} from "redux";
+import dialogs from "./dialogs";
 
 
-export default function(state=initialState, action) {
-    switch (action.type) {
-        default:
-    }
-
-    return state;
-}
+export default combineReducers({
+    dialogs: dialogs,
+});
