@@ -9,9 +9,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.render('index');
-});
 
 app.post('/add-dialog', (req, res) => {
     const { body: { userText } } = req;
@@ -38,6 +35,11 @@ app.del('/dialogs/:id', (req, res) => {
     res.set("Content-type", "application/json");
     res.end(JSON.stringify(dialogs.listDialogs()));
 });
+
+app.get('*', (req, res) => {
+    res.render('index');
+});
+
 
 app.listen(app.get('port'), () => {
     console.log('Node app is running on port', app.get('port'));

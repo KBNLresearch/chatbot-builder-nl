@@ -15,23 +15,18 @@ class App extends React.Component {
                 </div>
                 <div className="container container-fluid">
                     <div className="row">
-                        <ul className="list-group col-md-8">
+                        <ul className="list-group col-md-6 col-sm-8 col-xs-10">
                             <li className="list-group-item">
                                 <h5>Welkomstboodschap</h5>
-
                             </li>
                             <DialogIndex dialogs={this.props.dialogs}
                                          onRemoveDialog={this.props.onRemoveDialog}
                                          onAddDialog={this.props.onAddDialog} />
                         </ul>
+                        <div className="col-xs-1 col-md-1 col-sm-1" />
 
-                        <div className="col-md-16">
+                        {this.props.children}
 
-                        </div>
-
-                        <div className="col-md-8">
-
-                        </div>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import AddDialog from "./add-dialog";
 import ButtonWithModal from "../modals/button-with-modal";
+import { Link } from "react-router";
+import urls from "../../urls";
 
 class DialogIndex extends React.Component {
 
@@ -12,7 +14,9 @@ class DialogIndex extends React.Component {
                 <ul className="list-group">
                     {this.props.dialogs.map((dialog, i) => (
                         <li className="list-group-item" key={i}>
-                            {dialog.userText}
+                            <Link to={urls.dialogEdit(dialog.id)}>
+                                {dialog.userText}
+                            </Link>
 
                             <ButtonWithModal onConfirm={(onClose) => {onClose(); this.props.onRemoveDialog(dialog.id)}}
                                 className="btn btn-xs btn-danger pull-right" label="✖" altLabel="Verwijderen">
