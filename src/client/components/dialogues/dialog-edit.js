@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonWithModal from "../modals/button-with-modal";
+import AnswerForm from "./answer-form";
 
 class DialogEdit extends React.Component {
 
@@ -45,10 +45,7 @@ class DialogEdit extends React.Component {
                     <div className="row">
                         <div className="col-md-16">
                             <i>Bot</i><br />
-                            <ButtonWithModal className="btn btn-default" altLabel="Voeg antwoord toe"
-                                             label="Voeg een antwoord toe"
-                                             onConfirm={(onClose) => { onClose(); }}>
-                            </ButtonWithModal>
+                            <AnswerForm />
                         </div>
                     </div>
 
