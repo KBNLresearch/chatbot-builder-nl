@@ -15,18 +15,20 @@ class DialogTree extends React.Component {
     }
 
     render() {
-        const { dialog, buttonChoices } = this.props;
+        const { dialog, buttonChoices, onSelectButton } = this.props;
 
 
         return (
             <div>
-                {buttonChoices.map(buttonId => (
+                {buttonChoices.map((buttonId, buttonPos) => (
                     <div key={buttonId}>
                         <div className="row">
                             <div className="col-md-16"></div>
                             <div className="col-md-16">
                                 <i>Gebruiker</i><br />
-                                {this.findButtonText(buttonId)}
+                                <span className="label label-primary">
+                                    {this.findButtonText(buttonId)}
+                                </span>
                             </div>
                         </div>
                         <div className="row">
@@ -34,8 +36,8 @@ class DialogTree extends React.Component {
                                 <i>Bot</i><br />
                                 <AnswerList
                                     answers={dialog.answers.filter(a => a.parentId === buttonId)}
-                                    onSelectButton={(buttonId) => console.log(buttonId)}
-                                    selectedButton={null}
+                                    onSelectButton={(bId) => onSelectButton(bId, buttonPos + 1)}
+                                    selectedButton={buttonChoices[buttonPos + 1]}
                                 />
                                 <hr />
                                 <AnswerForm onAddAnswer={(data) => this.props.onAddAnswer({dialogId: dialog.id, data: data, parentId: buttonId})} />

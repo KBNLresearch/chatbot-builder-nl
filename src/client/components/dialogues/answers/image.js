@@ -7,7 +7,7 @@ class ImageAnswer extends React.Component {
         return (
             <div>
                 {responseText} <i>(na {responseDelay} milliseconden)</i><br />
-                <img src={url} style={{maxWidth: "100%"}} />
+                <img src={url} style={{maxWidth: "100%", maxHeight: "300px"}} />
             </div>
         );
     }

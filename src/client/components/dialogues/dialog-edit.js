@@ -15,9 +15,10 @@ class DialogEdit extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (typeof nextProps.dialog === 'undefined') {
             this.props.onRedirectToRoot();
+        } else if ((nextProps.dialog || {}).id !== (this.props.dialog || {}).id) {
+            this.setState({buttonChoices: []});
         }
 
-        this.setState({buttonChoices: []});
     }
 
     componentDidMount() {
@@ -28,6 +29,10 @@ class DialogEdit extends React.Component {
 
     setRootButtonChoice(buttonId) {
         this.setState({buttonChoices: [buttonId]});
+    }
+
+    setButtonChoiceAt(pos, buttonId) {
+        this.setState({buttonChoices: this.state.buttonChoices.slice(0, pos).concat(buttonId)});
     }
 
     render() {
@@ -70,7 +75,9 @@ class DialogEdit extends React.Component {
                             <hr />
                         </div>
                     </div>
-                    <DialogTree dialog={dialog} buttonChoices={this.state.buttonChoices}
+                    <DialogTree dialog={dialog}
+                                onSelectButton={(buttonId, pos) => this.setButtonChoiceAt(pos, buttonId)}
+                                buttonChoices={this.state.buttonChoices}
                                 onAddAnswer={this.props.onAddAnswer} />
                     <pre >
                         {JSON.stringify(dialog, null, 2)}
