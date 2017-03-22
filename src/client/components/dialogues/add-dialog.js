@@ -12,9 +12,8 @@ class AddDialog extends React.Component {
         };
     }
 
-    onConfirm(onClose = () => {}) {
+    onConfirm() {
         const { userText } = this.state;
-        onClose();
         this.setState({modalOpen: false, userText: ""});
 
         this.props.onAddDialog(userText);
@@ -28,7 +27,8 @@ class AddDialog extends React.Component {
                              disabled={userText.length < 1}
                              dialogueOpen={modalOpen}
                              onOpen={() => this.setState({modalOpen: true})}
-                             onConfirm={this.onConfirm.bind(this)}>
+                             onConfirm={this.onConfirm.bind(this)}
+                             onClose={() => this.setState({modalOpen: false})}>
                 <input className="form-control" type="text"
                        onKeyPress={(ev) => ev.key === 'Enter' ? this.onConfirm() : false }
                        onChange={(ev) => this.setState({userText: ev.target.value})}

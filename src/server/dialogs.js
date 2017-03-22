@@ -23,9 +23,11 @@ const makeNewDialog = (userText, frogResponse) => {
         id: uuid(),
         userText: userText,
         frogAnalysis: frogAnalysis,
-        matchPhrase: frogAnalysis.length > 1 ? frogAnalysis
-            .filter(f => f.form.indexOf("N") === 0)
-            .map(f => f.exact) : frogAnalysis[0].exact
+        matchPhrase: frogAnalysis.length > 1
+            ? frogAnalysis
+                .filter(f => f.form.indexOf("N") === 0)
+                .map(f => f.exact)
+            : [ frogAnalysis[0].exact ]
     };
 };
 

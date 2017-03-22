@@ -13,14 +13,15 @@ class AnswerForm extends React.Component {
     }
 
     render() {
-        console.log(this.state);
+
         return (
             <ButtonWithModal className="btn btn-default" altLabel="Voeg antwoord toe"
                              label="Voeg een antwoord toe"
                              dialogueOpen={this.state.modalOpen}
                              onOpen={() => this.setState({modalOpen: true})}
                              disabled={this.state.responseType.length === 0}
-                             onConfirm={(onClose) => {  }}>
+                             onConfirm={() => { this.setState({modalOpen: false}); }}
+                             onClose={() => this.setState({modalOpen: false})}>
 
                 <select className="form-control"
                     onChange={(ev) => this.setState({responseType: ev.target.value})}>
