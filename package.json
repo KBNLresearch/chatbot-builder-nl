@@ -26,7 +26,8 @@
     "react-router": "^3.0.2",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "xhr": "^2.3.3"
+    "xhr": "^2.3.3",
+    "webpack": "^1.14.0"
   },
   "engines": {
     "node": "^6.9.4"
@@ -42,7 +43,6 @@
     "mocha": "^3.2.0",
     "sinon": "^1.17.7",
     "sinon-as-promised": "^4.0.2",
-    "uuid": "^3.0.1",
-    "webpack": "^1.14.0"
+    "uuid": "^3.0.1"
   }
 }
