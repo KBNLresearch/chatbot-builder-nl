@@ -57,14 +57,14 @@ const togglePartOfMatchPhrase = (uuid, word) => (dispatch) =>
     });
 
 
-const addAnswer = ({dialogId, data}) => (dispatch) =>
+const addAnswer = ({dialogId, data, parentId}) => (dispatch) =>
     xhr({
         method: 'PUT',
         url: `/dialogs/${dialogId}/add-answer`,
         headers: {
             'Content-type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({data: data, parentId: parentId})
     }, (err, resp, body) => {
         dispatch({
             type: ActionTypes.RECEIVE_DIALOGS,

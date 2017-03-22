@@ -92,14 +92,14 @@ const togglePhrasePart = (id, word) => {
     )));
 };
 
-const addAnswer = (id, data) => {
+const addAnswer = (id, data, parentId) => {
     const dialogs = listDialogs();
 
     saveDialogs(dialogs.map(dialog => (
         dialog.id === id
             ? Object.assign(
                 dialog, {
-                    answers: dialog.answers.concat(makeNewAnswer(data))
+                    answers: dialog.answers.concat(makeNewAnswer(data, parentId))
                 })
             : dialog
     )));

@@ -1,19 +1,33 @@
 import React from "react";
 import AnswerForm from "./answer-form";
 import AnswerList from "./answer-list";
+import DialogTree from "./dialog-tree";
 
 class DialogEdit extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            buttonChoices: []
+        }
+    }
     componentWillReceiveProps(nextProps) {
         if (typeof nextProps.dialog === 'undefined') {
             this.props.onRedirectToRoot();
         }
+
+        this.setState({buttonChoices: []});
     }
 
     componentDidMount() {
         if (typeof this.props.dialog === 'undefined') {
             this.props.onRedirectToRoot();
         }
+    }
+
+    setRootButtonChoice(buttonId) {
+        this.setState({buttonChoices: [buttonId]});
     }
 
     render() {
@@ -46,14 +60,18 @@ class DialogEdit extends React.Component {
                     <div className="row">
                         <div className="col-md-16">
                             <i>Bot</i><br />
-                            <AnswerList answers={dialog.answers.filter(a => a.parentId === null)} />
+                            <AnswerList
+                                answers={dialog.answers.filter(a => a.parentId === null)}
+                                onSelectButton={(buttonId) => this.setRootButtonChoice(buttonId)}
+                                selectedButton={this.state.buttonChoices.length > 0 ? this.state.buttonChoices[0] : null}
+                            />
                             <hr />
                             <AnswerForm onAddAnswer={(data) => this.props.onAddAnswer({dialogId: dialog.id, data: data})} />
                             <hr />
-
                         </div>
                     </div>
-
+                    <DialogTree dialog={dialog} buttonChoices={this.state.buttonChoices}
+                                onAddAnswer={this.props.onAddAnswer} />
                     <pre >
                         {JSON.stringify(dialog, null, 2)}
                     </pre>

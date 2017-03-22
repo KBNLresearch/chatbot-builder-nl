@@ -45,9 +45,9 @@ app.put('/dialogs/:id/toggle-phrase-part', (req, res) => {
 });
 
 app.put('/dialogs/:id/add-answer', (req, res) => {
-    const { body } = req;
+    const { body: { data, parentId } } = req;
 
-    dialogs.addAnswer(req.params.id, body);
+    dialogs.addAnswer(req.params.id, data, parentId);
 
     endResponse(res);
 });
