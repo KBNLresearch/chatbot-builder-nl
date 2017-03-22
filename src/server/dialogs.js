@@ -4,9 +4,8 @@ const fs = require("fs"),
 
 const dialogFile = "./files/dialogs.json";
 
-const makeNewDialog = (userText, tagResponse) => {
-
-    const tagAnalysis = tagResponse
+const transformAnalysis = (tagResponse) =>
+    tagResponse
         .split("\n")
         .filter(row => row.trim().length > 0)
         .map(wordAnalysis => {
@@ -19,6 +18,10 @@ const makeNewDialog = (userText, tagResponse) => {
                 selected: form.indexOf("N") === 0 || form === "UH"
             }
         });
+
+const makeNewDialog = (userText, tagResponse) => {
+
+    const tagAnalysis = transformAnalysis(tagResponse);
 
     return {
         id: uuid(),
@@ -101,4 +104,4 @@ const addAnswer = (id, data, parentId) => {
     )));
 };
 
-module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer }
+module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis }

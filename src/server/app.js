@@ -1,13 +1,28 @@
+const config = {
+        "appSecret": process.env.MESSENGER_APP_SECRET,
+        "pageAccessToken": process.env.MESSENGER_PAGE_ACCESS_TOKEN,
+        "validationToken": process.env.MESSENGER_VALIDATION_TOKEN,
+        "serverURL": process.env.SERVER_URL,
+        "pathPrefix": "",
+        "port": process.env.PORT
+    };
+
 const
     bodyParser = require('body-parser'),
     express = require('express'),
-    dialogs = require('./dialogs');
+    dialogs = require('./dialogs'),
+    fb = require("./fb/fb-lib")(config),
+    botHandlers = require("./bot/handlers")(fb),
+    webHook = require("./bot/webhook")(fb, botHandlers);
 
 const app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
-app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use(bodyParser.json({verify: fb.verifyRequestSignature}));
+
+app.get(`/webhook`, fb.validateWebhook);
+app.post(`/webhook`, webHook);
 
 const endResponse = (res) => {
     res.status(200);
