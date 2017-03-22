@@ -17,7 +17,6 @@ const addDialog = (userText, next) => (dispatch) =>
         next(resp.headers['x-uuid']);
     });
 
-
 const fetchDialogs = (next = () => {}) => (dispatch) =>
     xhr({
         method: 'GET',
@@ -57,4 +56,20 @@ const togglePartOfMatchPhrase = (uuid, word) => (dispatch) =>
         });
     });
 
-export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase }
+
+const addAnswer = ({dialogId, data}) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/${dialogId}/add-answer`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
+export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer }

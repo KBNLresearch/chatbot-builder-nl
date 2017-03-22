@@ -1,4 +1,4 @@
-import { addDialog, removeDialog, togglePartOfMatchPhrase } from "./actions/dialogs";
+import { addDialog, removeDialog, togglePartOfMatchPhrase, addAnswer } from "./actions/dialogs";
 
 
 export default function actionsMaker(navigateTo, dispatch) {
@@ -6,6 +6,7 @@ export default function actionsMaker(navigateTo, dispatch) {
         onAddDialog: (userText) => dispatch(addDialog(userText, (id) => navigateTo('dialogEdit', [id]))),
         onRemoveDialog: (uuid) => dispatch(removeDialog(uuid)),
         onTogglePartOfMatchPhrase: (uuid, word) => dispatch(togglePartOfMatchPhrase(uuid, word)),
-        onRedirectToRoot: () => navigateTo('root')
+        onRedirectToRoot: () => navigateTo('root'),
+        onAddAnswer: (params) => dispatch(addAnswer(params))
     };
 };

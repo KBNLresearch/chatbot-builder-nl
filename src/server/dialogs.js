@@ -23,6 +23,7 @@ const makeNewDialog = (userText, frogResponse) => {
         id: uuid(),
         userText: userText,
         frogAnalysis: frogAnalysis,
+        answers: [],
         matchPhrase: frogAnalysis.length > 1
             ? frogAnalysis
                 .filter(f => f.form.indexOf("N") === 0)
@@ -30,6 +31,16 @@ const makeNewDialog = (userText, frogResponse) => {
             : [ frogAnalysis[0].exact ]
     };
 };
+
+const makeNewAnswer = (data, parentId = null) => ({
+    responseType: data.responseType,
+    responseText: data.responseText,
+    responseDelay: parseInt(data.responseDelay, 10),
+    typeDelay: parseInt(data.typeDelay, 10),
+    buttons: data.buttons.map(button => ({text: button, id: uuid()})),
+    url: data.url,
+    parentId: parentId
+});
 
 const saveDialogs = (dialogs) => {
     fs.writeFileSync(dialogFile, JSON.stringify(dialogs));
@@ -78,8 +89,19 @@ const togglePhrasePart = (id, word) => {
            })
        : dialog
     )));
-
-
 };
 
-module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart }
+const addAnswer = (id, data) => {
+    const dialogs = listDialogs();
+
+    saveDialogs(dialogs.map(dialog => (
+        dialog.id === id
+            ? Object.assign(
+                dialog, {
+                    answers: dialog.answers.concat(makeNewAnswer(data))
+                })
+            : dialog
+    )));
+};
+
+module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer }

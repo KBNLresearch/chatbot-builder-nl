@@ -24,6 +24,15 @@ class AnswerForm extends React.Component {
 
 
     onConfirm() {
+        const { responseType, responseText, responseDelay, typeDelay, buttons, url } = this.state;
+        this.props.onAddAnswer({
+            responseType: responseType,
+            responseText: responseText,
+            responseDelay: responseDelay,
+            typeDelay: typeDelay,
+            buttons: buttons,
+            url: url
+        });
         this.setState(initialState);
     }
 

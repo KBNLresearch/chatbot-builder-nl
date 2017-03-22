@@ -15,7 +15,7 @@ class RemoveDialog extends React.Component {
     render() {
         const { dialog } = this.props;
         return (
-            <ButtonWithModal onConfirm={() => this.props.onRemoveDialog(dialog.id)}
+            <ButtonWithModal onConfirm={() => {this.props.onRemoveDialog(dialog.id); this.setState({dialogOpen: false})}}
                              className="btn btn-xs btn-danger pull-right" label="✖" altLabel="Verwijderen"
                              onClose={() => this.setState({dialogOpen: false})}
                              onOpen={() => this.setState({dialogOpen: true})}

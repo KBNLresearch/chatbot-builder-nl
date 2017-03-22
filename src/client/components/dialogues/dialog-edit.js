@@ -45,7 +45,7 @@ class DialogEdit extends React.Component {
                     <div className="row">
                         <div className="col-md-16">
                             <i>Bot</i><br />
-                            <AnswerForm />
+                            <AnswerForm onAddAnswer={(data) => this.props.onAddAnswer({dialogId: dialog.id, data: data})} />
                         </div>
                     </div>
 
