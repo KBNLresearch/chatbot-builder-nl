@@ -70,12 +70,40 @@ class AnswerForm extends React.Component {
     }
 
     urlFields(disabled, placeholder) {
-        const { url } = this.state;
+        const { url, responseText } = this.state;
         return (<div>
+            <h4>Linktekst</h4>
+            <input className="form-control"
+                   value={responseText}
+                   onChange={(ev) => this.setState({responseText: ev.target.value})}
+                   placeholder="Linktekst..."
+                   disabled={disabled} />
             <h4>Webadres</h4>
             <input type="text" className="form-control"
                    onChange={(ev) => this.setState({url: ev.target.value})}
                    value={url} placeholder={placeholder} disabled={disabled} />
+        </div>);
+    }
+
+    imageFields(disabled, placeholder) {
+        const { url } = this.state;
+        return (<div>
+            <h4>Afbeelding</h4>
+            <input type="text" className="form-control"
+                   onChange={(ev) => this.setState({url: ev.target.value})}
+                   value={url} placeholder={placeholder} disabled={disabled} />
+        </div>);
+    }
+
+    textFields(disabled) {
+        const { responseText } = this.state;
+        return (<div>
+            <h4>Antwoordtekst</h4>
+            <input className="form-control"
+                   value={responseText}
+                   onChange={(ev) => this.setState({responseText: ev.target.value})}
+                   placeholder="Antwoordtekst..."
+                   disabled={disabled} />
         </div>);
     }
 
@@ -98,12 +126,14 @@ class AnswerForm extends React.Component {
     getSpecFields(disabled) {
         const { responseType } = this.state;
         switch (responseType) {
+            case "text":
+                return this.textFields(disabled);
             case "buttons":
                 return this.buttonFields(disabled);
             case "url":
                 return this.urlFields(disabled, "Webadres...");
             case "image":
-                return this.urlFields(disabled, "Webadres van afbeelding...");
+                return this.imageFields(disabled, "Webadres van afbeelding...");
             case "typing":
                 return this.typingFields(disabled);
             default:
@@ -114,9 +144,12 @@ class AnswerForm extends React.Component {
     typedComplete() {
         const { responseType } = this.state;
         switch (responseType) {
+            case "text":
+                return this.state.responseText.length > 0;
             case "buttons":
                 return this.state.buttons.length > 0;
             case "url":
+                return this.state.url.length > 0 && this.state.responseText.length > 0;
             case "image":
                 return this.state.url.length > 0;
             case "typing":
@@ -128,13 +161,13 @@ class AnswerForm extends React.Component {
 
     baseComplete() {
         const { responseType, responseText, responseDelay } = this.state;
-        return responseType.length > 0 && responseText.length > 0 && responseDelay.length > 0;
+        return responseType.length > 0 && responseDelay.length > 0;
     }
 
     render() {
         const {responseType, responseText, responseDelay, modalOpen } = this.state;
 
-        const specFields = this.getSpecFields(responseType.length === 0 || responseText.length === 0 || responseDelay.length === 0);
+        const specFields = this.getSpecFields(!this.baseComplete());
 
         return (
             <ButtonWithModal className="btn btn-default" altLabel="Voeg antwoord toe"
@@ -166,14 +199,6 @@ class AnswerForm extends React.Component {
                     <option value="3000">3 Seconden</option>
                     <option value="5000">5 Seconden</option>
                 </select>
-
-                <h4>Antwoordtekst</h4>
-                <input className="form-control"
-                       value={responseText}
-                       onChange={(ev) => this.setState({responseText: ev.target.value})}
-                       placeholder="Bot zegt..."
-                       disabled={responseType.length === 0 || responseDelay.length === 0 || responseType === "typing"} />
-
                 {specFields}
             </ButtonWithModal>
         );
