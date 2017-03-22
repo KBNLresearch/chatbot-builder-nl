@@ -4,16 +4,20 @@ const dialogs = require("../dialogs"),
 const scoreWord = (a, b) => {
     let score = a.exact.toLowerCase() === b.exact.toLowerCase() ? 50 : 0;
     score += a.norm.toLowerCase() === b.norm.toLowerCase() ? 35 : 0;
-    score +=  a.form === b.form ? 15 : 0;
+    score +=  a.form === b.form ? 5 : 0;
+
     return score;
 };
 
 const scoreSentence = (messageData, dialogData) => {
     const scores = dialogData
         .filter(word => word.selected)
-        .map(word => messageData.map(messageWord => scoreWord(word, messageWord)).reduce((a, b) => a + b, 0));
+        .map(word => messageData
+            .map(messageWord => scoreWord(word, messageWord))
+            .reduce((a, b) => a + b, 0)
+        );
 
-    return scores.reduce((a, b) => a + b, 0) / scores.length;
+    return scores.reduce((a, b) => a + b, 0);
 };
 
 const matchNlp = (messageData) => {
@@ -25,7 +29,8 @@ const matchNlp = (messageData) => {
         }))
         .sort((a, b) => b.score - a.score);
 
-    return scored.filter(d => d.score > 0).length > 0 ? scored[0] : null;
+    console.log(scored);
+    return scored.filter(d => d.score > 15).length > 0 ? scored[0] : null;
 };
 
 module.exports = (fb) => {
