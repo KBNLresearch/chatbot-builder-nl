@@ -1,5 +1,6 @@
 import React from "react";
 import AnswerForm from "./answer-form";
+import AnswerList from "./answer-list";
 
 class DialogEdit extends React.Component {
 
@@ -45,7 +46,11 @@ class DialogEdit extends React.Component {
                     <div className="row">
                         <div className="col-md-16">
                             <i>Bot</i><br />
+                            <AnswerList answers={dialog.answers.filter(a => a.parentId === null)} />
+                            <hr />
                             <AnswerForm onAddAnswer={(data) => this.props.onAddAnswer({dialogId: dialog.id, data: data})} />
+                            <hr />
+
                         </div>
                     </div>
 

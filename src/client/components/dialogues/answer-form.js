@@ -89,8 +89,8 @@ class AnswerForm extends React.Component {
                 <option value="">- Selecteer een lengte -</option>
                 <option value="500">Halve seconde</option>
                 <option value="1000">Seconde</option>
-                <option value="3000">3 Secondes</option>
-                <option value="5000">5 Secondes</option>
+                <option value="3000">3 Seconden</option>
+                <option value="5000">5 Seconden</option>
             </select>
         </div>)
     }
@@ -163,8 +163,8 @@ class AnswerForm extends React.Component {
                     <option value="0">Direct reageren</option>
                     <option value="500">Halve seconde</option>
                     <option value="1000">Seconde</option>
-                    <option value="3000">3 Secondes</option>
-                    <option value="5000">5 Secondes</option>
+                    <option value="3000">3 Seconden</option>
+                    <option value="5000">5 Seconden</option>
                 </select>
 
                 <h4>Antwoordtekst</h4>

@@ -33,6 +33,7 @@ const makeNewDialog = (userText, frogResponse) => {
 };
 
 const makeNewAnswer = (data, parentId = null) => ({
+    id: uuid(),
     responseType: data.responseType,
     responseText: data.responseText,
     responseDelay: parseInt(data.responseDelay, 10),
