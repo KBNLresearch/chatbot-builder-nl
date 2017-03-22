@@ -21,7 +21,7 @@ class DialogEdit extends React.Component {
 
         if (typeof dialog === 'undefined') { return null; }
 
-        const { frogAnalysis, matchPhrase } = dialog;
+        const { tagAnalysis, matchPhrase } = dialog;
 
         return (
             <div className="panel panel-default col-md-25">
@@ -33,7 +33,7 @@ class DialogEdit extends React.Component {
                         <div className="col-md-16"></div>
                         <div className="col-md-16">
                             <i>Gebruiker</i><br />
-                            {frogAnalysis.map((word, i) => (
+                            {tagAnalysis.map((word, i) => (
                                 <span key={i}
                                       onClick={() => this.props.onTogglePartOfMatchPhrase(dialog.id, word.exact)}
                                       className={`label ${matchPhrase.indexOf(word.exact) > -1 ? "label-primary" : "label-default"}`}

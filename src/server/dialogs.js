@@ -4,13 +4,13 @@ const fs = require("fs"),
 
 const dialogFile = "./files/dialogs.json";
 
-const makeNewDialog = (userText, frogResponse) => {
+const makeNewDialog = (userText, tagResponse) => {
 
-    const frogAnalysis = frogResponse
+    const tagAnalysis = tagResponse
         .split("\n")
         .filter(row => row.trim().length > 0)
         .map(wordAnalysis => {
-            const [_i, exact, norm, _j, form, _a, _b, _c, _d, pos] = wordAnalysis.split("\t");
+            const [exact, norm, form, pos] = wordAnalysis.split("\t");
             return {
                 exact: exact,
                 norm: norm,
@@ -22,13 +22,13 @@ const makeNewDialog = (userText, frogResponse) => {
     return {
         id: uuid(),
         userText: userText,
-        frogAnalysis: frogAnalysis,
+        tagAnalysis: tagAnalysis,
         answers: [],
-        matchPhrase: frogAnalysis.length > 1
-            ? frogAnalysis
+        matchPhrase: tagAnalysis.length > 1
+            ? tagAnalysis
                 .filter(f => f.form.indexOf("N") === 0)
                 .map(f => f.exact)
-            : [ frogAnalysis[0].exact ]
+            : [ tagAnalysis[0].exact ]
     };
 };
 
@@ -62,8 +62,8 @@ const addDialog = (userText, next) => {
 
     rp.get({
         uri: `${process.env.FROG}?text=${encodeURIComponent(userText)}`,
-    }).then(frogAnalysis => {
-        const newDialog = makeNewDialog(userText, frogAnalysis);
+    }).then(tagAnalysis => {
+        const newDialog = makeNewDialog(userText, tagAnalysis);
         dialogs.push(newDialog);
         saveDialogs(dialogs);
         next(newDialog.id);
