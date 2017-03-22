@@ -1,1 +1,0 @@
-/home/rar010/work/chatbot-nlp/clips.py
