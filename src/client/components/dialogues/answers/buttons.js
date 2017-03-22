@@ -8,6 +8,7 @@ class ButtonAnswer extends React.Component {
 
         return (
             <div>
+                {responseText} <i>(na {responseDelay} milliseconden)</i><br />
                 {buttons.map((button, i) => (
                     <button key={i}
                             onClick={() => onSelectButton(button.id)}
@@ -15,7 +16,6 @@ class ButtonAnswer extends React.Component {
                         {button.text}
                     </button>
                 ))}
-                <i>{" "}(na {responseDelay} milliseconden)</i><br />
             </div>
         );
     }

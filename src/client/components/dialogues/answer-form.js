@@ -46,8 +46,14 @@ class AnswerForm extends React.Component {
     }
 
     buttonFields(disabled) {
-        const { buttons, newButtonText } = this.state;
+        const { buttons, newButtonText, responseText } = this.state;
         return (<div>
+            <h4>Antwoordtekst</h4>
+            <input className="form-control"
+                   value={responseText}
+                   onChange={(ev) => this.setState({responseText: ev.target.value})}
+                   placeholder="Antwoordtekst..."
+                   disabled={disabled} />
             <h4>Knoppen toevoegen</h4>
             {buttons.map((button, i) => (
                 <button key={i} className="btn btn-default"
@@ -147,7 +153,7 @@ class AnswerForm extends React.Component {
             case "text":
                 return this.state.responseText.length > 0;
             case "buttons":
-                return this.state.buttons.length > 0;
+                return this.state.responseText.length > 0 && this.state.buttons.length > 0;
             case "url":
                 return this.state.url.length > 0 && this.state.responseText.length > 0;
             case "image":
