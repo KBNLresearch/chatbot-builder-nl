@@ -15,7 +15,8 @@ const makeNewDialog = (userText, tagResponse) => {
                 exact: exact,
                 norm: norm,
                 form: form,
-                pos: pos
+                pos: pos,
+                selected: form.indexOf("N") === 0 || form === "UH"
             }
         });
 
@@ -23,12 +24,7 @@ const makeNewDialog = (userText, tagResponse) => {
         id: uuid(),
         userText: userText,
         tagAnalysis: tagAnalysis,
-        answers: [],
-        matchPhrase: tagAnalysis.length > 1
-            ? tagAnalysis
-                .filter(f => f.form.indexOf("N") === 0)
-                .map(f => f.exact)
-            : [ tagAnalysis[0].exact ]
+        answers: []
     };
 };
 
@@ -82,11 +78,11 @@ const togglePhrasePart = (id, word) => {
 
     saveDialogs(dialogs.map(dialog => (
        dialog.id === id
-           ? Object.assign(
-               dialog, {
-               matchPhrase: dialog.matchPhrase.indexOf(word) > -1
-                   ? dialog.matchPhrase.filter(w => w !== word)
-                   : dialog.matchPhrase.concat(word)
+           ? Object.assign(dialog, {
+                tagAnalysis: dialog.tagAnalysis.map((w) => w.exact === word
+                    ? Object.assign(w, {selected: !w.selected})
+                    : w
+                )
            })
        : dialog
     )));
