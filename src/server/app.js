@@ -40,6 +40,14 @@ app.post('/add-dialog', (req, res) => {
     });
 });
 
+app.post('/add-start-dialog', (req, res) => {
+
+    dialogs.addStartDialog();
+
+    endResponse(res);
+
+});
+
 app.get('/dialogs', (req, res) => {
     endResponse(res);
 });

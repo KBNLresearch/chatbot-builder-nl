@@ -23,7 +23,7 @@ class AddDialog extends React.Component {
         const { userText, modalOpen } = this.state;
 
         return (
-            <ButtonWithModal className="btn btn-default" label="Voeg een dialoog toe"
+            <ButtonWithModal className="btn btn-default" label={this.props.label}
                              disabled={userText.length < 1}
                              dialogueOpen={modalOpen}
                              onOpen={() => this.setState({modalOpen: true})}
@@ -33,14 +33,16 @@ class AddDialog extends React.Component {
                        onKeyPress={(ev) => ev.key === 'Enter' ? this.onConfirm() : false }
                        onChange={(ev) => this.setState({userText: ev.target.value})}
                        value={userText}
-                       placeholder="Gebruiker zegt..." />
+                       placeholder={this.props.placeholder} />
             </ButtonWithModal>
         );
     }
 }
 
 AddDialog.propTypes = {
-    onAddDialog: React.PropTypes.func
+    onAddDialog: React.PropTypes.func,
+    label: React.PropTypes.string.isRequired,
+    placeholder: React.PropTypes.string.isRequired
 };
 
 export default AddDialog;

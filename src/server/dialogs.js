@@ -4,6 +4,8 @@ const fs = require("fs"),
 
 const dialogFile = "./files/dialogs.json";
 
+const START_CONV_ID = "__start_conversation__";
+
 const transformAnalysis = (tagResponse) =>
     tagResponse
         .split("\n")
@@ -19,12 +21,12 @@ const transformAnalysis = (tagResponse) =>
             }
         });
 
-const makeNewDialog = (userText, tagResponse) => {
+const makeNewDialog = (userText, tagResponse, id = null) => {
 
     const tagAnalysis = transformAnalysis(tagResponse);
 
     return {
-        id: uuid(),
+        id: id || uuid(),
         userText: userText,
         tagAnalysis: tagAnalysis,
         answers: []
@@ -67,7 +69,30 @@ const addDialog = (userText, next) => {
         saveDialogs(dialogs);
         next(newDialog.id);
     });
+};
 
+const addStartDialog = () => {
+    const dialogs = listDialogs().filter(d => d.id !== START_CONV_ID);
+    dialogs.push(makeNewDialog("Aan de slag", "", START_CONV_ID));
+    saveDialogs(dialogs);
+
+    rp.post({
+        uri: `https://graph.facebook.com/v2.6/me/thread_settings?access_token=${process.env.MESSENGER_PAGE_ACCESS_TOKEN}`,
+        body: {
+            "setting_type":"call_to_actions",
+            "thread_state":"new_thread",
+            "call_to_actions":[
+                {
+                    "payload": START_CONV_ID
+                }
+            ]
+        },
+        json: true
+    }).catch((err) =>
+        console.error(err, JSON.stringify(err, null, 2))
+    ).then((body) =>
+        console.log("Call to actions succeeded: ", JSON.stringify(body, null, 2))
+    )
 };
 
 const removeDialog = (id) => {
@@ -179,5 +204,5 @@ const importFile = (dialogs) => {
 
 module.exports = {
     addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer, removeAnswer,
-    importFile
+    addStartDialog, importFile, START_CONV_ID
 };

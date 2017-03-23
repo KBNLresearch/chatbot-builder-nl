@@ -22,7 +22,8 @@ class App extends React.Component {
                             </li>
                             <DialogIndex dialogs={this.props.dialogs}
                                          onRemoveDialog={this.props.onRemoveDialog}
-                                         onAddDialog={this.props.onAddDialog} />
+                                         onAddDialog={this.props.onAddDialog}
+                                         onCreateStartDialog={this.props.onCreateStartDialog} />
                             <li className="list-group-item">
                                 <h5>Import / Export</h5>
                                 <a className="btn btn-default" href="/dialogs/download">
@@ -35,7 +36,6 @@ class App extends React.Component {
                             </li>
                         </ul>
                         <div className="col-xs-1 col-md-1 col-sm-1" />
-
                         {this.props.children}
                     </div>
                 </div>

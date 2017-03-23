@@ -18,11 +18,13 @@ class DialogIndex extends React.Component {
                             <Link to={urls.dialogEdit(dialog.id)}>
                                 {dialog.userText}
                             </Link>
-
                         </li>
                     ))}
                 </ul>
-                <AddDialog onAddDialog={this.props.onAddDialog} />
+                <AddDialog onAddDialog={this.props.onAddDialog}  label="Voeg een dialoog toe" placeholder="Gebruiker zegt..."/>
+                <button className="btn btn-default"  onClick={this.props.onCreateStartDialog}>
+                    Voeg een startknop toe
+                </button>
             </li>
         );
     }

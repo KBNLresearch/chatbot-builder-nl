@@ -59,7 +59,7 @@ class DialogEdit extends React.Component {
 
         if (typeof dialog === 'undefined') { return null; }
 
-        const { tagAnalysis } = dialog;
+        const { tagAnalysis, userText } = dialog;
         const { onSwapUp, onSwapDown, onRemoveAnswer } = this.props;
 
         return (
@@ -80,6 +80,9 @@ class DialogEdit extends React.Component {
                                     {word.exact}
                                 </span>
                             ))}
+                            <span className="label label-primary">
+                                {tagAnalysis.length === 0 ? userText : null }
+                            </span>
                         </div>
                     </div>
                     <div className="row">

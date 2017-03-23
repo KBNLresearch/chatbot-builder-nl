@@ -80,11 +80,19 @@ module.exports = (fb) => {
 
 
     const onPostback = (senderID, payload) => {
-        const [dialogId, parentId] = payload.split("|");
-        const dialog = dialogs.listDialogs().find(d => d.id === dialogId);
-        if (typeof dialog === 'undefined') { return; }
-        const { answers } = dialog;
-        handleAnswers(senderID, dialog.id, answers.filter(a => a.parentId === parentId));
+
+        if (payload === dialogs.START_CONV_ID) {
+            const { answers } = dialogs.listDialogs().find(d => d.id === dialogs.START_CONV_ID);
+            handleAnswers(senderID, dialogs.START_CONV_ID, answers.filter(a => a.parentId === null));
+        } else {
+            const [dialogId, parentId] = payload.split("|");
+            const dialog = dialogs.listDialogs().find(d => d.id === dialogId);
+            if (typeof dialog === 'undefined') {
+                return;
+            }
+            const {answers} = dialog;
+            handleAnswers(senderID, dialog.id, answers.filter(a => a.parentId === parentId));
+        }
     };
 
     return {
