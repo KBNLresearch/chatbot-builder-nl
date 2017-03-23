@@ -1,0 +1,23 @@
+{
+    "entry": [
+        {
+            "id": 1397278930293852,
+            "messaging": [
+                {
+                    "postback": {
+                        "payload": ":PAYLOAD:"
+                    },
+                    "recipient": {
+                        "id": 1397278930293852
+                    },
+                    "sender": {
+                        "id": 1397278930293852
+                    },
+                    "timestamp": 1460620433123
+                }
+            ],
+            "time": 1460620433256
+        }
+    ],
+    "object": "page"
+}
