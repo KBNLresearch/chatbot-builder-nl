@@ -1,4 +1,5 @@
 import React from "react";
+import AnswerWrapper from "./wrapper";
 
 class ButtonAnswer extends React.Component {
 
@@ -7,7 +8,7 @@ class ButtonAnswer extends React.Component {
         const { onSelectButton, selectedButton } = this.props;
 
         return (
-            <div>
+            <AnswerWrapper>
                 {responseText} <i>(na {responseDelay} milliseconden)</i><br />
                 {buttons.map((button, i) => (
                     <button key={i}
@@ -16,7 +17,7 @@ class ButtonAnswer extends React.Component {
                         {button.text}
                     </button>
                 ))}
-            </div>
+            </AnswerWrapper>
         );
     }
 }

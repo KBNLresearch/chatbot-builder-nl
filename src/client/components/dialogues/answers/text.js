@@ -1,13 +1,14 @@
 import React from "react";
+import AnswerWrapper from "./wrapper";
 
 class TextAnswer extends React.Component {
 
     render() {
         const { responseText, responseDelay } = this.props;
         return (
-            <div>
+            <AnswerWrapper>
                 {responseText} <i>(na {responseDelay} milliseconden)</i>
-            </div>
+            </AnswerWrapper>
         );
     }
 }

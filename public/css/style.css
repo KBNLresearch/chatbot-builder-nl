@@ -1,29 +1,20 @@
-.pagination > li  > a {
-    cursor: pointer
+.answer .tools {
+    display: none;
 }
 
-.list-group-item a {
+.answer:hover {
+    background-color: #f9f9f9;
+}
+
+.answer:hover .tools {
+    display: block;
+}
+
+.answer .tools span {
     cursor: pointer;
+    float: right;
 }
 
-.list-group-item.active a {
-    color: white;
-    cursor: default;
-}
-
-@media print {
-    .breadcrumb {
-        display: none;
-    }
-    .collapsed-panel {
-        display: none;
-    }
-
-    a[href]:after {
-        content: none !important;
-    }
-
-    .glyphicon {
-        display: none;
-    }
+.answer .tools span:hover {
+    color: #337ab7;
 }
