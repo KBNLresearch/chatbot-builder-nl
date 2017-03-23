@@ -15,13 +15,15 @@ const answerMap = {
 
 class AnswerList extends React.Component {
     render() {
-        const { answers, onSelectButton, selectedButton } = this.props;
+        const { answers, onSelectButton, selectedButton, onSwapUp, onSwapDown } = this.props;
         return (
             <div>
                 {answers.map((answer, i) => answerMap[answer.responseType]({
                     ...answer, key: i,
                     onSelectButton: onSelectButton,
-                    selectedButton: selectedButton
+                    selectedButton: selectedButton,
+                    onSwapUp: () => onSwapUp(answer.id),
+                    onSwapDown: () => onSwapDown(answer.id)
                 }))}
             </div>
         );

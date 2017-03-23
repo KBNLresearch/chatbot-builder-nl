@@ -8,7 +8,7 @@ class ButtonAnswer extends React.Component {
         const { onSelectButton, selectedButton } = this.props;
 
         return (
-            <AnswerWrapper>
+            <AnswerWrapper {...this.props}>
                 {responseText} <i>(na {responseDelay} milliseconden)</i><br />
                 {buttons.map((button, i) => (
                     <button key={i}

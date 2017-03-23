@@ -41,6 +41,7 @@ class DialogEdit extends React.Component {
         if (typeof dialog === 'undefined') { return null; }
 
         const { tagAnalysis } = dialog;
+        const { onSwapUp, onSwapDown } = this.props;
 
         return (
             <div className="panel panel-default col-md-25">
@@ -68,6 +69,8 @@ class DialogEdit extends React.Component {
                             <AnswerList
                                 answers={dialog.answers.filter(a => a.parentId === null)}
                                 onSelectButton={(buttonId) => this.setRootButtonChoice(buttonId)}
+                                onSwapUp={(answerId) => onSwapUp(answerId, dialog.id)}
+                                onSwapDown={(answerId) => onSwapDown(answerId, dialog.id)}
                                 selectedButton={this.state.buttonChoices.length > 0 ? this.state.buttonChoices[0] : null}
                             />
                             <hr />
@@ -78,6 +81,8 @@ class DialogEdit extends React.Component {
                     <DialogTree dialog={dialog}
                                 onSelectButton={(buttonId, pos) => this.setButtonChoiceAt(pos, buttonId)}
                                 buttonChoices={this.state.buttonChoices}
+                                onSwapUp={(answerId) => onSwapUp(answerId, dialog.id)}
+                                onSwapDown={(answerId) => onSwapDown(answerId, dialog.id)}
                                 onAddAnswer={this.props.onAddAnswer} />
                     <pre >
                         {JSON.stringify(dialog, null, 2)}

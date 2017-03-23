@@ -117,6 +117,9 @@ module.exports = (config) => {
      *
      */
     function verifyRequestSignature(req, res, buf) {
+        if (req.path.indexOf("/webhook") !== 0) {
+            return;
+        }
         const signature = req.headers["x-hub-signature"];
 
         if (!signature) {

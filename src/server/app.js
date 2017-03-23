@@ -44,7 +44,7 @@ app.get('/dialogs', (req, res) => {
     endResponse(res);
 });
 
-app.del('/dialogs/:id', (req, res) => {
+app.delete('/dialogs/:id', (req, res) => {
 
     dialogs.removeDialog(req.params.id);
 
@@ -63,6 +63,14 @@ app.put('/dialogs/:id/add-answer', (req, res) => {
     const { body: { data, parentId } } = req;
 
     dialogs.addAnswer(req.params.id, data, parentId);
+
+    endResponse(res);
+});
+
+app.put('/dialogs/:id/swap-answer', (req, res) => {
+    const { body: { answerId, direction } } = req;
+
+    dialogs.swapAnswer(req.params.id, answerId, direction);
 
     endResponse(res);
 });

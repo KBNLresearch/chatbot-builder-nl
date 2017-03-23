@@ -104,4 +104,38 @@ const addAnswer = (id, data, parentId) => {
     )));
 };
 
-module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis }
+const swapAnswers = (answers, answerId, direction) => {
+    const { parentId } = answers.find(a => a.id === answerId);
+    const neighboursWithIdx = answers
+        .map((a, idx) => ({idx: idx, answer: a}))
+        .filter(a => a.answer.parentId === parentId)
+        .map((n, idx) => ({idx: idx, neighbour: n}));
+
+    const answerWithIdx = neighboursWithIdx.find(n => n.neighbour.answer.id === answerId);
+
+    const {idx: nIdx, neighbour: {idx: aIdx, answer } } = answerWithIdx;
+    const swapWith = direction === "up"
+        ? neighboursWithIdx[nIdx - 1]
+        : neighboursWithIdx[nIdx + 1];
+
+    if (typeof swapWith === 'undefined') { return answers; }
+
+    answers[aIdx] = answers[swapWith.neighbour.idx];
+    answers[swapWith.neighbour.idx] = answer;
+    return answers;
+};
+
+const swapAnswer = (id, answerId, direction) => {
+    const dialogs = listDialogs();
+
+    saveDialogs(dialogs.map(dialog =>
+        dialog.id === id
+            ? Object.assign(dialog, {
+                answers: swapAnswers(dialog.answers, answerId, direction)
+            })
+            : dialog
+    ));
+};
+
+
+module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer }

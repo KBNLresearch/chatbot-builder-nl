@@ -11,12 +11,18 @@ class AnswerWrapper extends React.Component {
                 </div>
                 <div className="col-md-4 col-sm-4 col-xs-4 tools">
                     <span className="glyphicon glyphicon-remove" />
-                    <span className="glyphicon glyphicon-arrow-down" />
-                    <span className="glyphicon glyphicon-arrow-up" />
+                    <span className="glyphicon glyphicon-edit" />
+                    <span onClick={this.props.onSwapDown} className="glyphicon glyphicon-arrow-down" />
+                    <span onClick={this.props.onSwapUp} className="glyphicon glyphicon-arrow-up" />
                 </div>
             </div>
         );
     }
 }
+
+AnswerWrapper.propTypes = {
+    onSwapUp: React.PropTypes.func.isRequired,
+    onSwapDown: React.PropTypes.func.isRequired,
+};
 
 export default AnswerWrapper;

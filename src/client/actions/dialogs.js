@@ -72,4 +72,19 @@ const addAnswer = ({dialogId, data, parentId}) => (dispatch) =>
         });
     });
 
-export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer }
+const swapAnswer = (answerId, dialogId, direction) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/${dialogId}/swap-answer`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({answerId: answerId, direction: direction})
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
+export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer }
