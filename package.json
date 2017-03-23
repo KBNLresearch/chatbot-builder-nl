@@ -6,7 +6,8 @@
   "scripts": {
     "watch": "node_modules/.bin/webpack --colors --watch",
     "start:dev": "node src/server/app.js",
-    "start": "node_modules/.bin/webpack --optimize-minimize && node src/server/app.js"
+    "postinstall": "node_modules/.bin/webpack --optimize-minimize",
+    "start": "node src/server/app.js"
   },
   "repository": {
     "type": "git",

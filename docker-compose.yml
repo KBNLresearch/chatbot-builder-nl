@@ -2,10 +2,9 @@ version: '2'
 
 services:
   web:
-    build: .
+    image: renevanderark/chatbot-builder-web
     ports:
       - "5000:5000"
-    environment:
-      - FROG=http://nlp:5001/
+    env_file: .env
   nlp:
-    build: ./nlp
+    image: renevanderark/chatbot-builder-nlp
