@@ -102,4 +102,20 @@ const removeAnswer = (answerId, dialogId) => (dispatch) =>
         });
     });
 
-export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer }
+const importDialogFile = (data) => (dispatch) =>
+    xhr({
+        method: 'POST',
+        url: `/dialogs/import`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: data
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
+
+export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer, importDialogFile  }

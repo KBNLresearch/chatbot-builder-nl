@@ -173,6 +173,11 @@ const removeAnswer = (id, answerId) => {
     ));
 };
 
+const importFile = (dialogs) => {
+    saveDialogs(dialogs);
+};
+
 module.exports = {
-    addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer, removeAnswer
+    addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer, removeAnswer,
+    importFile
 };

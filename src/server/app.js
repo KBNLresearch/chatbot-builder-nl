@@ -44,6 +44,18 @@ app.get('/dialogs', (req, res) => {
     endResponse(res);
 });
 
+app.get('/dialogs/download', (req, res) => {
+    res.set('Content-Disposition', 'attachment; filename="dialog-export.txt"')
+    endResponse(res);
+});
+
+app.post('/dialogs/import', (req, res) => {
+
+    dialogs.importFile(req.body);
+
+    endResponse(res);
+});
+
 app.delete('/dialogs/:id', (req, res) => {
 
     dialogs.removeDialog(req.params.id);

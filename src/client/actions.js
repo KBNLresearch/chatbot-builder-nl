@@ -1,4 +1,4 @@
-import { addDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer } from "./actions/dialogs";
+import { addDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer, importDialogFile } from "./actions/dialogs";
 
 
 export default function actionsMaker(navigateTo, dispatch) {
@@ -12,5 +12,13 @@ export default function actionsMaker(navigateTo, dispatch) {
         onSwapUp: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "up")),
         onSwapDown: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "down")),
         onRemoveAnswer: (answerId, dialogId) => dispatch(removeAnswer(answerId, dialogId)),
+
+        onUpload: (ev) => {
+            const reader = new FileReader();
+
+            reader.onload = (e) => { dispatch(importDialogFile(e.target.result)) }
+
+            reader.readAsText(ev.target.files[0]);
+        }
     };
 };
