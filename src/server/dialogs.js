@@ -137,5 +137,42 @@ const swapAnswer = (id, answerId, direction) => {
     ));
 };
 
+const findDescendantsFor = (answers, buttonIds, result = []) => {
+    const descendants = answers.filter(a => buttonIds.indexOf(a.parentId) > -1);
 
-module.exports = { addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer }
+    if (descendants.length === 0) {
+        return result;
+    } else {
+        return findDescendantsFor(answers, descendants
+            .map(d => (d.buttons || []).map(b => b.id))
+            .reduce((a, b) => a.concat(b), []),
+            result.concat(descendants.map(d => d.id)));
+    }
+};
+
+const removeFromAnswers = (answers, answerId) => {
+    const { buttons } = answers.find(a => a.id === answerId);
+
+    const childAnswers = findDescendantsFor(answers, (buttons || []).map(b => b.id));
+
+    return answers
+        .filter(a => a.id !== answerId)
+        .filter(a => childAnswers.indexOf(a.id) < 0);
+
+};
+
+const removeAnswer = (id, answerId) => {
+    const dialogs = listDialogs();
+
+    saveDialogs(dialogs.map(dialog =>
+        dialog.id === id
+            ? Object.assign(dialog, {
+                answers: removeFromAnswers(dialog.answers, answerId)
+            })
+            : dialog
+    ));
+};
+
+module.exports = {
+    addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer, removeAnswer
+};

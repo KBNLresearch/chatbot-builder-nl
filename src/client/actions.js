@@ -1,4 +1,4 @@
-import { addDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer } from "./actions/dialogs";
+import { addDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer } from "./actions/dialogs";
 
 
 export default function actionsMaker(navigateTo, dispatch) {
@@ -10,6 +10,7 @@ export default function actionsMaker(navigateTo, dispatch) {
         onAddAnswer: (params) => dispatch(addAnswer(params)),
 
         onSwapUp: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "up")),
-        onSwapDown: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "down"))
+        onSwapDown: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "down")),
+        onRemoveAnswer: (answerId, dialogId) => dispatch(removeAnswer(answerId, dialogId)),
     };
 };

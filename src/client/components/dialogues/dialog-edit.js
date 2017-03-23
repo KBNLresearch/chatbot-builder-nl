@@ -35,13 +35,32 @@ class DialogEdit extends React.Component {
         this.setState({buttonChoices: this.state.buttonChoices.slice(0, pos).concat(buttonId)});
     }
 
+    removeButtonChoiceForAnswer(answerId) {
+        const { dialog: { answers } } = this.props;
+        const { buttons } = answers.filter(a => a.id === answerId)[0];
+        const { buttonChoices } = this.state;
+
+        const currentButtons = buttons.map(b => b.id);
+        const choice = buttonChoices
+            .map((bId, idx) => ({buttonId: bId, idx: idx}))
+            .filter(b => currentButtons.indexOf(b.buttonId) > -1)[0];
+
+        if (typeof choice !== 'undefined') {
+            if (choice.idx === 0) {
+                this.setState({buttonChoices: []})
+            } else {
+                this.setState({buttonChoices: this.state.buttonChoices.slice(0, choice.idx)});
+            }
+        }
+    }
+
     render() {
         const { dialog } = this.props;
 
         if (typeof dialog === 'undefined') { return null; }
 
         const { tagAnalysis } = dialog;
-        const { onSwapUp, onSwapDown } = this.props;
+        const { onSwapUp, onSwapDown, onRemoveAnswer } = this.props;
 
         return (
             <div className="panel panel-default col-md-25">
@@ -71,6 +90,10 @@ class DialogEdit extends React.Component {
                                 onSelectButton={(buttonId) => this.setRootButtonChoice(buttonId)}
                                 onSwapUp={(answerId) => onSwapUp(answerId, dialog.id)}
                                 onSwapDown={(answerId) => onSwapDown(answerId, dialog.id)}
+                                onRemoveAnswer={(answerId) => {
+                                    this.removeButtonChoiceForAnswer(answerId);
+                                    onRemoveAnswer(answerId, dialog.id)
+                                }}
                                 selectedButton={this.state.buttonChoices.length > 0 ? this.state.buttonChoices[0] : null}
                             />
                             <hr />
@@ -83,6 +106,10 @@ class DialogEdit extends React.Component {
                                 buttonChoices={this.state.buttonChoices}
                                 onSwapUp={(answerId) => onSwapUp(answerId, dialog.id)}
                                 onSwapDown={(answerId) => onSwapDown(answerId, dialog.id)}
+                                onRemoveAnswer={(answerId) => {
+                                    this.removeButtonChoiceForAnswer(answerId);
+                                    onRemoveAnswer(answerId, dialog.id)
+                                }}
                                 onAddAnswer={this.props.onAddAnswer} />
                     <pre >
                         {JSON.stringify(dialog, null, 2)}

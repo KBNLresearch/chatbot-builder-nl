@@ -87,4 +87,19 @@ const swapAnswer = (answerId, dialogId, direction) => (dispatch) =>
         });
     });
 
-export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer }
+const removeAnswer = (answerId, dialogId) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/${dialogId}/remove-answer`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({answerId: answerId})
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
+export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer }

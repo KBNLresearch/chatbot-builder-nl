@@ -75,6 +75,14 @@ app.put('/dialogs/:id/swap-answer', (req, res) => {
     endResponse(res);
 });
 
+app.put('/dialogs/:id/remove-answer', (req, res) => {
+    const { body: { answerId, direction } } = req;
+
+    dialogs.removeAnswer(req.params.id, answerId);
+
+    endResponse(res);
+});
+
 app.get('*', (req, res) => {
     res.render('index');
 });

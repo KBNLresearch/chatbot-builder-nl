@@ -15,7 +15,7 @@ class DialogTree extends React.Component {
     }
 
     render() {
-        const { dialog, buttonChoices, onSelectButton, onSwapDown, onSwapUp } = this.props;
+        const { dialog, buttonChoices, onSelectButton, onSwapDown, onSwapUp, onRemoveAnswer } = this.props;
 
 
         return (
@@ -37,8 +37,9 @@ class DialogTree extends React.Component {
                                 <AnswerList
                                     answers={dialog.answers.filter(a => a.parentId === buttonId)}
                                     onSelectButton={(bId) => onSelectButton(bId, buttonPos + 1)}
-                                    onSwapUp={(bId) => onSwapUp(bId)}
-                                    onSwapDown={(bId) => onSwapDown(bId)}
+                                    onSwapUp={onSwapUp}
+                                    onSwapDown={onSwapDown}
+                                    onRemoveAnswer={onRemoveAnswer}
                                     selectedButton={buttonChoices[buttonPos + 1]}
                                 />
                                 <hr />
