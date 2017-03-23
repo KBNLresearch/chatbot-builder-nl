@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FROG=http://nlp:5001/
+  nlp:
+    build: ./nlp
