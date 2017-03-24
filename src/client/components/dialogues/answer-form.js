@@ -64,7 +64,6 @@ class AnswerForm extends React.Component {
     render() {
         const { modalOpen } = this.state;
 
-
         return (
             <ButtonWithModal className="btn btn-default" altLabel="Voeg antwoord toe"
                              label="Voeg een antwoord toe"

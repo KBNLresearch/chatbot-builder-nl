@@ -4,7 +4,7 @@ import AnswerWrapper from "./wrapper";
 class ImageAnswer extends React.Component {
 
     render() {
-        const { responseText, responseDelay, url } = this.props;
+        const { responseDelay, url} = this.props;
         return (
             <AnswerWrapper {...this.props}>
                 <img src={url} style={{maxWidth: "100%", maxHeight: "300px"}} />

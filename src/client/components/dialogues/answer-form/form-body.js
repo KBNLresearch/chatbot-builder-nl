@@ -11,7 +11,7 @@ class AnswerFormBody extends React.Component {
     }
 
     buttonFields(disabled) {
-        const { buttons, newButtonText, responseText } = this.props;
+        const { buttons, newButtonText, responseText, disabledFields } = this.props;
         return (<div>
             <h4>Antwoordtekst</h4>
             <input className="form-control"
@@ -22,6 +22,7 @@ class AnswerFormBody extends React.Component {
             <h4>Knoppen toevoegen</h4>
             {buttons.map((button, i) => (
                 <button key={i} className="btn btn-default"
+                        disabled={disabledFields.indexOf("buttons") > -1}
                         onClick={() => this.props.setParentState({buttons: buttons.filter(b => b !== button)})}>
                     {button}
                 </button>
@@ -30,11 +31,11 @@ class AnswerFormBody extends React.Component {
             <input type="text"  value={newButtonText}
                    onChange={(ev) => this.props.setParentState({newButtonText: ev.target.value})}
                    onKeyPress={(ev) => ev.key === 'Enter' ? this.props.setParentState({buttons: buttons.concat(newButtonText), newButtonText: ""}) : false }
-                   disabled={disabled} placeholder="Knoptekst" />
+                   disabled={disabled || disabledFields.indexOf("newButtonText") > -1} placeholder="Knoptekst" />
 
             <button className="btn btn-default"
                     onClick={() => this.props.setParentState({buttons: buttons.concat(newButtonText), newButtonText: ""})}
-                    disabled={disabled || newButtonText.length === 0}>
+                    disabled={disabled || newButtonText.length === 0  || disabledFields.indexOf("buttons") > -1}>
                 Knop toevoegen
             </button>
         </div>);
@@ -114,14 +115,16 @@ class AnswerFormBody extends React.Component {
 
 
     render() {
-        const {responseType, responseDelay } = this.props;
+        const {responseType, responseDelay, disabledFields } = this.props;
 
         const specFields = this.getSpecFields(!this.props.baseComplete());
 
         return (
             <div>
                 <h4>Antwoordtype</h4>
-                <select className="form-control" value={responseType} onChange={this.setType.bind(this)}>
+                <select className="form-control" value={responseType}
+                        disabled={disabledFields.indexOf("responseType") > -1 }
+                        onChange={this.setType.bind(this)}>
                     <option value="">- Selecteer een type -</option>
                     <option value="text">Tekst</option>
                     <option value="buttons">Knoppen</option>
@@ -132,7 +135,7 @@ class AnswerFormBody extends React.Component {
 
                 <h4>Vertraging</h4>
                 <select className="form-control" value={responseDelay}
-                        disabled={responseType.length === 0}
+                        disabled={responseType.length === 0 || disabledFields.indexOf("responseDelay") > -1 }
                         onChange={(ev) => this.props.setParentState({responseDelay: ev.target.value})}>
                     <option value="">- Selecteer vertragingstijd -</option>
                     <option value="0">Direct reageren</option>
@@ -146,6 +149,10 @@ class AnswerFormBody extends React.Component {
         );
     }
 }
+
+AnswerFormBody.defaultProps = {
+    disabledFields: []
+};
 
 AnswerFormBody.propTypes = {
     setParentState: React.PropTypes.func.isRequired,
