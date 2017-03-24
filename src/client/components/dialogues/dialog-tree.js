@@ -23,17 +23,17 @@ class DialogTree extends React.Component {
                 {buttonChoices.map((buttonId, buttonPos) => (
                     <div key={buttonId}>
                         <div className="row">
-                            <div className="col-md-16"></div>
-                            <div className="col-md-16">
-                                <i>Gebruiker</i><br />
+                            <div className="col-md-8" />
+                            <div className="col-md-23 text-right">
+                                <h4><i>Gebruiker</i></h4>
                                 <span className="label label-primary">
                                     {this.findButtonText(buttonId)}
                                 </span>
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-md-16">
-                                <i>Bot</i><br />
+                            <div className="col-md-31">
+                                <h4><i>Bot</i></h4>
                                 <AnswerList
                                     answers={dialog.answers.filter(a => a.parentId === buttonId)}
                                     onSelectButton={(bId) => onSelectButton(bId, buttonPos + 1)}

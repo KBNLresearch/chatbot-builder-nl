@@ -18,3 +18,10 @@
 .answer .tools span:hover {
     color: #337ab7;
 }
+
+
+@media (min-width:992px) {
+    .conversation {
+        border-right: 1px solid #eee;
+    }
+}

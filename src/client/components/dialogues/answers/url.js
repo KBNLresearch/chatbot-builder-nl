@@ -7,8 +7,9 @@ class UrlAnswer extends React.Component {
         const { responseText, responseDelay, url } = this.props;
         return (
             <AnswerWrapper {...this.props}>
+                {responseText}<br />
                 <a className="btn btn-default btn-xs" href={url} target="_blank">
-                    {responseText}
+                    Lees verder
                 </a> <i>(na {responseDelay} milliseconden)</i>
             </AnswerWrapper>
         );
