@@ -33,6 +33,14 @@ const matchNlp = (messageData) => {
     return scored.filter(d => d.score > 15).length > 0 ? scored[0] : null;
 };
 
+const applyBindVars = (text, bindVars) => {
+    let boundText = text;
+    for (let i = 0; i < bindVars.length; i++) {
+        boundText = boundText.split(`$${i + 1}`).join(bindVars[i]);
+    }
+    return boundText;
+};
+
 module.exports = (fb) => {
 
     const handleAnswers = (senderID, dialogId, answers, bindVars =[]) => {
@@ -41,18 +49,28 @@ module.exports = (fb) => {
             curDelay += answer.responseDelay;
             setTimeout(() => {
                 switch (answer.responseType) {
-                    case "text": return fb.sendTextMessage(senderID, answer.responseText);
-                    case "url": return fb.sendURL(senderID, answer.url, answer.responseText);
-                    case "image": return fb.sendImageMessage(senderID, answer.url);
+                    case "text":
+                        return fb.sendTextMessage(senderID, applyBindVars(answer.responseText, bindVars));
+
+                    case "url":
+                        return fb.sendURL(senderID,
+                            applyBindVars(answer.url, bindVars), applyBindVars(answer.responseText, bindVars));
+
+                    case "image":
+                        return fb.sendImageMessage(senderID, applyBindVars(answer.url, bindVars));
+
                     case "typing":
                         setTimeout(() => { fb.sendTypingOff(senderID); }, answer.typeDelay);
                         return fb.sendTypingOn(senderID);
+
                     case "buttons":
                         return fb.sendButtonMessage(senderID, ({
-                            text: answer.responseText,
+                            text: applyBindVars(answer.responseText, bindVars),
                             data: answer.buttons.map(b => ({
-                                title: b.text,
-                                payload: [dialogId, b.id].concat(bindVars).concat(b.text).join("|")
+                                title: applyBindVars(b.text, bindVars),
+                                payload: [dialogId, b.id]
+                                    .concat(bindVars)
+                                    .concat(applyBindVars(b.text, bindVars)).join("|")
                             }))
                         }))
                 }
