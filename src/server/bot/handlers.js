@@ -32,10 +32,10 @@ const matchNlp = (messageData) => {
     return scored.filter(d => d.score > 15).length > 0 ? scored[0] : null;
 };
 
-const applyBindVars = (text, bindVars) => {
+const applyBindVars = (text, bindVars, transform = str => str) => {
     let boundText = text;
     for (let i = 0; i < bindVars.length; i++) {
-        boundText = boundText.split(`$${i + 1}`).join(bindVars[i]);
+        boundText = boundText.split(`$${i + 1}`).join(transform(bindVars[i]));
     }
     return boundText;
 };
@@ -80,14 +80,17 @@ module.exports = (fb) => {
             setTimeout(() => {
                 switch (answer.responseType) {
                     case "text":
-                        return fb.sendTextMessage(senderID, applyBindVars(answer.responseText, bindVars));
+                        return fb.sendTextMessage(senderID,
+                            applyBindVars(answer.responseText, bindVars));
 
                     case "url":
                         return fb.sendURL(senderID,
-                            applyBindVars(answer.url, bindVars), applyBindVars(answer.responseText, bindVars));
+                            applyBindVars(answer.url, bindVars, encodeURIComponent),
+                            applyBindVars(answer.responseText, bindVars));
 
                     case "image":
-                        return fb.sendImageMessage(senderID, applyBindVars(answer.url, bindVars));
+                        return fb.sendImageMessage(senderID,
+                            applyBindVars(answer.url, bindVars, encodeURIComponent));
 
                     case "typing":
                         setTimeout(() => { fb.sendTypingOff(senderID); }, answer.typeDelay);
