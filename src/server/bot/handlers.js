@@ -40,6 +40,37 @@ const applyBindVars = (text, bindVars) => {
     return boundText;
 };
 
+const grabVariableWords = (messageWords, stop) => {
+    let binding = [];
+    while (messageWords.length > 0) {
+        const nextWord  = messageWords.shift();
+        if (nextWord === stop) {
+            messageWords.unshift(nextWord);
+            return binding.join(" ");
+        }
+        binding.push(nextWord);
+    }
+
+    return binding.join(" ");
+};
+
+const matchBoundVariables = (dialogAnalysis, messageAnalysis) => {
+    const matchWords = dialogAnalysis.filter(a => a.selected).map(a => a.exact.toLowerCase());
+    let boundVars = [];
+    let messageWords = messageAnalysis.map(a => a.exact.toLowerCase());
+    for (let i = 0; i < matchWords.length; i++) {
+        const matchWord = matchWords[i];
+        if (matchWord === "%") {
+            const stop = matchWords[i + 1];
+            boundVars.push(grabVariableWords(messageWords, stop));
+        } else if (messageWords.indexOf(matchWord) > -1) {
+            messageWords.splice(messageWords.indexOf(matchWord), 1);
+        }
+    }
+
+    return boundVars;
+};
+
 module.exports = (fb) => {
 
     const handleAnswers = (senderID, dialogId, answers, bindVars =[]) => {
@@ -78,17 +109,27 @@ module.exports = (fb) => {
         });
     };
 
+    const sendCallToAction = (senderID) => {
+        const { answers } = dialogs.listDialogs().find(d => d.id === dialogs.START_CONV_ID) || {};
+        if (typeof answers !== 'undefined') {
+            handleAnswers(senderID, dialogs.START_CONV_ID, answers.filter(a => a.parentId === null));
+        }
+    };
+
 
     const onTextMessage = (messageText, senderID) => {
         rp.get({
             uri: `${process.env.FROG}?text=${encodeURIComponent(messageText)}`,
         }).then(tagAnalysis => {
-            const bestMatch = matchNlp(dialogs.transformAnalysis(tagAnalysis));
+            const messageAnalysis = dialogs.transformAnalysis(tagAnalysis);
+            const bestMatch = matchNlp(messageAnalysis);
             if (bestMatch === null) {
-                fb.sendTextMessage(senderID, "[TODO]: terugvaltekst");
+                sendCallToAction(senderID);
             } else {
-                const {answers} = bestMatch.dialog;
-                handleAnswers(senderID, bestMatch.dialog.id, answers.filter(a => a.parentId === null));
+                const {answers, tagAnalysis: dialogAnalysis} = bestMatch.dialog;
+                const bindVars = matchBoundVariables(dialogAnalysis, messageAnalysis);
+
+                handleAnswers(senderID, bestMatch.dialog.id, answers.filter(a => a.parentId === null), bindVars);
             }
         });
     };
@@ -99,10 +140,7 @@ module.exports = (fb) => {
     const onPostback = (senderID, payload) => {
 
         if (payload === dialogs.START_CONV_ID) {
-            const { answers } = dialogs.listDialogs().find(d => d.id === dialogs.START_CONV_ID) || {};
-            if (typeof answers !== 'undefined') {
-                handleAnswers(senderID, dialogs.START_CONV_ID, answers.filter(a => a.parentId === null));
-            }
+            sendCallToAction(senderID);
         } else {
             const [dialogId, parentId, ...bindVars] = payload.split("|");
             const dialog = dialogs.listDialogs().find(d => d.id === dialogId);
