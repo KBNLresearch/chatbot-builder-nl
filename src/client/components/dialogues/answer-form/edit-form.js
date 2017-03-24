@@ -3,15 +3,6 @@ import ModalCb from "../../modals/modal-with-close-callback";
 import ModalBody from "../../modals/modal-body";
 import AnswerFormBody from "./form-body";
 
-/*
- responseType: "",
- responseText: "",
- responseDelay: "",
- typeDelay: "",
- buttons: [],
- url: "",
- newButtonText: "",
- */
 const stateToFormProps = (state) => ({
     responseText: state.responseText,
     responseType: state.responseType,
@@ -22,18 +13,38 @@ const stateToFormProps = (state) => ({
     newButtonText: ""
 });
 
+const stateFromProps = (props) => {
+  let retVal = {};
+  const filterKeys = [
+      "id",
+      "responseType",
+      "responseText",
+      "responseDelay",
+      "typeDelay",
+      "buttons",
+      "url",
+      "parentId"
+  ];
+
+  Object.keys(props).forEach(key => {
+      if (filterKeys.indexOf(key) > -1) {
+          retVal[key] = props[key]
+      }
+  });
+
+  return retVal;
+};
+
 
 class AnswerEdit extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            ...props
-        };
+        this.state = stateFromProps(props);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(nextProps);
+        this.setState(stateFromProps(nextProps));
     }
 
     setStateFromForm(stateUpdate) {
@@ -63,6 +74,26 @@ class AnswerEdit extends React.Component {
         return responseType.length > 0 && ("" + responseDelay).length > 0;
     }
 
+
+    typedComplete() {
+        const { responseType } = this.state;
+        switch (responseType) {
+            case "text":
+                return this.state.responseText.length > 0;
+            case "buttons":
+                return this.state.responseText.length > 0 && this.state.buttons.length > 0;
+            case "url":
+                return this.state.url.length > 0 && this.state.responseText.length > 0;
+            case "image":
+                return this.state.url.length > 0;
+            case "typing":
+                return ("" + this.state.typeDelay).length > 0;
+            default:
+                return true;
+        }
+    }
+
+
     render() {
         return (
             <ModalCb closeCallback={this.props.onClose} title="Antwoord bewerken">
@@ -74,7 +105,8 @@ class AnswerEdit extends React.Component {
                     />
                 </ModalBody>
                 <div className="modal-footer">
-                    <button className="btn btn-default">
+                    <button className="btn btn-default" onClick={() => console.log(this.state)}
+                            disabled={!(this.baseComplete() && this.typedComplete())}>
                         Opslaan
                     </button>
                 </div>
