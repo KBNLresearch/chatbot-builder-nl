@@ -29,7 +29,6 @@ const matchNlp = (messageData) => {
         }))
         .sort((a, b) => b.score - a.score);
 
-    console.log(scored);
     return scored.filter(d => d.score > 15).length > 0 ? scored[0] : null;
 };
 
