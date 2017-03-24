@@ -96,9 +96,17 @@ app.put('/dialogs/:id/swap-answer', (req, res) => {
 });
 
 app.put('/dialogs/:id/remove-answer', (req, res) => {
-    const { body: { answerId, direction } } = req;
+    const { body: { answerId } } = req;
 
     dialogs.removeAnswer(req.params.id, answerId);
+
+    endResponse(res);
+});
+
+app.put('/dialogs/:id/update-answer', (req, res) => {
+    const { body: { answerId, data } } = req;
+
+    dialogs.updateAnswer(req.params.id, answerId, data);
 
     endResponse(res);
 });

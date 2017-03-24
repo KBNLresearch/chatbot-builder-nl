@@ -198,11 +198,25 @@ const removeAnswer = (id, answerId) => {
     ));
 };
 
+const updateAnswer = (id, answerId, data) => {
+    if (answerId !== data.id) {
+        return;
+    }
+
+    saveDialogs(listDialogs().map(dialog =>
+        dialog.id === id
+            ? Object.assign(dialog, {
+            answers: dialog.answers.map(a => a.id === answerId ? data : a)
+        })
+        : dialog
+    ));
+};
+
 const importFile = (dialogs) => {
     saveDialogs(dialogs);
 };
 
 module.exports = {
     addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer, removeAnswer,
-    addStartDialog, importFile, START_CONV_ID
+    updateAnswer, addStartDialog, importFile, START_CONV_ID
 };

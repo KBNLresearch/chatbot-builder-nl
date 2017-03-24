@@ -15,7 +15,8 @@ const answerMap = {
 
 class AnswerList extends React.Component {
     render() {
-        const { answers, onSelectButton, selectedButton, onSwapUp, onSwapDown, onRemoveAnswer } = this.props;
+        const { answers, onSelectButton, selectedButton, onSwapUp, onSwapDown, onRemoveAnswer,
+            onUpdateAnswer } = this.props;
         return (
             <div>
                 {answers.map((answer, i) => answerMap[answer.responseType]({
@@ -24,7 +25,8 @@ class AnswerList extends React.Component {
                     selectedButton: selectedButton,
                     onSwapUp: () => onSwapUp(answer.id),
                     onSwapDown: () => onSwapDown(answer.id),
-                    onRemove: () => onRemoveAnswer(answer.id)
+                    onRemove: () => onRemoveAnswer(answer.id),
+                    onChange: (data) => onUpdateAnswer(answer.id, data)
                 }))}
             </div>
         );

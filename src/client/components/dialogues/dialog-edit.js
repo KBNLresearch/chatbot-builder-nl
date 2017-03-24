@@ -60,7 +60,7 @@ class DialogEdit extends React.Component {
         if (typeof dialog === 'undefined') { return null; }
 
         const { tagAnalysis, userText } = dialog;
-        const { onSwapUp, onSwapDown, onRemoveAnswer } = this.props;
+        const { onSwapUp, onSwapDown, onRemoveAnswer, onUpdateAnswer } = this.props;
 
         return (
             <div className="panel panel-default col-md-25 col-sm-23 col-xs-21">
@@ -100,6 +100,7 @@ class DialogEdit extends React.Component {
                                         this.removeButtonChoiceForAnswer(answerId);
                                         onRemoveAnswer(answerId, dialog.id)
                                     }}
+                                    onUpdateAnswer={(answerId, data) => onUpdateAnswer(dialog.id, answerId, data)}
                                     selectedButton={this.state.buttonChoices.length > 0 ? this.state.buttonChoices[0] : null}
                                 />
                                 <hr />
@@ -116,6 +117,7 @@ class DialogEdit extends React.Component {
                                         this.removeButtonChoiceForAnswer(answerId);
                                         onRemoveAnswer(answerId, dialog.id)
                                     }}
+                                    onUpdateAnswer={(answerId, data) => onUpdateAnswer(dialog.id, answerId, data)}
                                     onAddAnswer={this.props.onAddAnswer} />
                     </div>
                     <div className="col-md-1" />

@@ -118,6 +118,21 @@ const removeAnswer = (answerId, dialogId) => (dispatch) =>
         });
     });
 
+const updateAnswer = (dialogId, answerId, data) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/${dialogId}/update-answer`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({answerId: answerId, data: data})
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
 const importDialogFile = (data) => (dispatch) =>
     xhr({
         method: 'POST',
@@ -135,4 +150,4 @@ const importDialogFile = (data) => (dispatch) =>
 
 
 export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer,
-    removeAnswer, importDialogFile, addStartDialog  }
+    removeAnswer, importDialogFile, addStartDialog, updateAnswer  }

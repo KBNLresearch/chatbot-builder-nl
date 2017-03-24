@@ -105,7 +105,8 @@ class AnswerEdit extends React.Component {
                     />
                 </ModalBody>
                 <div className="modal-footer">
-                    <button className="btn btn-default" onClick={() => console.log(this.state)}
+                    <button className="btn btn-default"
+                            onClick={() => { this.props.onConfirm(this.state); this.props.onClose()}}
                             disabled={!(this.baseComplete() && this.typedComplete())}>
                         Opslaan
                     </button>
@@ -116,7 +117,8 @@ class AnswerEdit extends React.Component {
 }
 
 AnswerEdit.propTypes = {
-    onClose: React.PropTypes.func.isRequired
+    onClose: React.PropTypes.func.isRequired,
+    onConfirm: React.PropTypes.func.isRequired
 };
 
 export default AnswerEdit;

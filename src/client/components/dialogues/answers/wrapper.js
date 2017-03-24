@@ -10,7 +10,9 @@ class AnswerWrapper extends React.Component {
 
     render() {
         const editForm = this.state.editIsOpen
-            ? <AnswerEdit {...this.props} onClose={() => this.setState({editIsOpen: false})}/>
+            ? <AnswerEdit {...this.props}
+                onConfirm={this.props.onChange}
+                onClose={() => this.setState({editIsOpen: false})}/>
             : null;
         return (
             <div className="row answer">
@@ -32,7 +34,8 @@ class AnswerWrapper extends React.Component {
 AnswerWrapper.propTypes = {
     onSwapUp: React.PropTypes.func.isRequired,
     onSwapDown: React.PropTypes.func.isRequired,
-    onRemove:  React.PropTypes.func.isRequired
+    onRemove:  React.PropTypes.func.isRequired,
+    onChange: React.PropTypes.func.isRequired
 };
 
 export default AnswerWrapper;

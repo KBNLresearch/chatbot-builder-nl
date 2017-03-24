@@ -1,5 +1,5 @@
 import { addDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer,
-    importDialogFile, addStartDialog } from "./actions/dialogs";
+    importDialogFile, addStartDialog, updateAnswer } from "./actions/dialogs";
 
 
 export default function actionsMaker(navigateTo, dispatch) {
@@ -16,6 +16,7 @@ export default function actionsMaker(navigateTo, dispatch) {
         onSwapUp: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "up")),
         onSwapDown: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "down")),
         onRemoveAnswer: (answerId, dialogId) => dispatch(removeAnswer(answerId, dialogId)),
+        onUpdateAnswer: (dialogId, answerId, data) => dispatch(updateAnswer(dialogId, answerId, data)),
 
         onUpload: (ev) => {
             const reader = new FileReader();
