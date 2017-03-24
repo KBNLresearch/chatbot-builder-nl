@@ -1,5 +1,7 @@
 import React from "react";
 import AnswerWrapper from "./wrapper";
+import highlightVars from "./highlight-vars";
+
 
 class ButtonAnswer extends React.Component {
 
@@ -9,7 +11,7 @@ class ButtonAnswer extends React.Component {
 
         return (
             <AnswerWrapper {...this.props}>
-                {responseText} <i>(na {responseDelay} milliseconden)</i><br />
+                {highlightVars(responseText)} <i>(na {responseDelay} milliseconden)</i><br />
                 {buttons.map((button, i) => (
                     <button key={i}
                             onClick={() => onSelectButton(button.id)}

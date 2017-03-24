@@ -1,5 +1,6 @@
 import React from "react";
 import AnswerWrapper from "./wrapper";
+import highlightVars from "./highlight-vars";
 
 class UrlAnswer extends React.Component {
 
@@ -7,9 +8,9 @@ class UrlAnswer extends React.Component {
         const { responseText, responseDelay, url } = this.props;
         return (
             <AnswerWrapper {...this.props}>
-                {responseText}<br />
+                {highlightVars(responseText)}<br />
                 <a className="btn btn-default btn-xs" href={url} target="_blank">
-                    Lees verder
+                    Lees verder ({highlightVars(url)})
                 </a> <i>(na {responseDelay} milliseconden)</i>
             </AnswerWrapper>
         );
