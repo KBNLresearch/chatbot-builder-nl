@@ -82,8 +82,10 @@ module.exports = (fb) => {
     const onPostback = (senderID, payload) => {
 
         if (payload === dialogs.START_CONV_ID) {
-            const { answers } = dialogs.listDialogs().find(d => d.id === dialogs.START_CONV_ID);
-            handleAnswers(senderID, dialogs.START_CONV_ID, answers.filter(a => a.parentId === null));
+            const { answers } = dialogs.listDialogs().find(d => d.id === dialogs.START_CONV_ID) || {};
+            if (typeof answers !== 'undefined') {
+                handleAnswers(senderID, dialogs.START_CONV_ID, answers.filter(a => a.parentId === null));
+            }
         } else {
             const [dialogId, parentId] = payload.split("|");
             const dialog = dialogs.listDialogs().find(d => d.id === dialogId);
