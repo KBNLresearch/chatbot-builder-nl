@@ -35,7 +35,7 @@ const matchNlp = (messageData) => {
 
 module.exports = (fb) => {
 
-    const handleAnswers = (senderID, dialogId, answers) => {
+    const handleAnswers = (senderID, dialogId, answers, bindVars =[]) => {
         let curDelay = 0;
         answers.forEach(answer => {
             curDelay += answer.responseDelay;
@@ -52,7 +52,7 @@ module.exports = (fb) => {
                             text: answer.responseText,
                             data: answer.buttons.map(b => ({
                                 title: b.text,
-                                payload: `${dialogId}|${b.id}`
+                                payload: [dialogId, b.id].concat(bindVars).concat(b.text).join("|")
                             }))
                         }))
                 }
@@ -87,13 +87,13 @@ module.exports = (fb) => {
                 handleAnswers(senderID, dialogs.START_CONV_ID, answers.filter(a => a.parentId === null));
             }
         } else {
-            const [dialogId, parentId] = payload.split("|");
+            const [dialogId, parentId, ...bindVars] = payload.split("|");
             const dialog = dialogs.listDialogs().find(d => d.id === dialogId);
             if (typeof dialog === 'undefined') {
                 return;
             }
             const {answers} = dialog;
-            handleAnswers(senderID, dialog.id, answers.filter(a => a.parentId === parentId));
+            handleAnswers(senderID, dialog.id, answers.filter(a => a.parentId === parentId), bindVars);
         }
     };
 
