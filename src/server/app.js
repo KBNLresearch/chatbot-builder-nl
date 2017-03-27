@@ -159,6 +159,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/auth', (req, res) => {
+    console.log("CODE=", req.query.code);
     rp.get({
         uri: `https://graph.facebook.com/v2.8/oauth/access_token?` +
             `client_id=${config.appId}` +
@@ -168,6 +169,7 @@ app.get('/auth', (req, res) => {
         json: true
     }).then(data => {
         res.status(302);
+        console.log("TOKEN=", data.access_token);
         res.set('Location', `/?token=${data.access_token}`);
         res.end()
     }).catch(err => {
@@ -176,11 +178,14 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/check-token', (req, res) => {
+    console.log("CHECK=", `https://graph.facebook.com/me/?fields=name,accounts&access_token=${req.query.token}`);
+
     res.set('Content-type', 'application/json');
     rp.get({
        uri: `https://graph.facebook.com/me/?fields=name,accounts&access_token=${req.query.token}`,
        json: true
     }).then(data => {
+        console.log("RESP=", JSON.stringify(data, null, 2));
         try {
             if (data.accounts.data.map(p => p.id).indexOf(config.pageId) > -1) {
                 res.status(200);
