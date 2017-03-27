@@ -7,14 +7,20 @@ class AddDialog extends React.Component {
         super(props);
 
         this.state = {
-            userText: "",
+            userText: props.userText || "",
             modalOpen: false
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.userText) {
+            this.setState({userText: nextProps.userText});
+        }
+    }
+
     onConfirm() {
         const { userText } = this.state;
-        this.setState({modalOpen: false, userText: ""});
+        this.setState({modalOpen: false, userText: this.props.userText || ""});
 
         this.props.onAddDialog(userText);
     }
@@ -23,7 +29,8 @@ class AddDialog extends React.Component {
         const { userText, modalOpen } = this.state;
 
         return (
-            <ButtonWithModal className="btn btn-default" label={this.props.label}
+            <ButtonWithModal className={`${this.props.className || "btn btn-default"}`}
+                             label={this.props.label}
                              disabled={userText.length < 1}
                              dialogueOpen={modalOpen}
                              onOpen={() => this.setState({modalOpen: true})}

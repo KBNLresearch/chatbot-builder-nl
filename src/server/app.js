@@ -40,6 +40,15 @@ app.post('/add-dialog', (req, res) => {
     });
 });
 
+
+app.put('/dialogs/:id/update', (req, res) => {
+    const { body: { userText } } = req;
+
+    dialogs.updateDialog(userText, req.params.id, () => endResponse(res));
+
+});
+
+
 app.post('/add-start-dialog', (req, res) => {
 
     dialogs.addStartDialog();

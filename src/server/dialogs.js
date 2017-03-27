@@ -71,6 +71,21 @@ const addDialog = (userText, next) => {
     });
 };
 
+const updateDialog = (userText, id, next) => {
+    const currentDialog = listDialogs().find(d => d.id === id);
+
+    rp.get({
+        uri: `${process.env.FROG}?text=${encodeURIComponent(userText)}`,
+    }).then(tagAnalysis => {
+        const updatedDialog = Object.assign(
+            makeNewDialog(userText, tagAnalysis, id),
+            { answers: currentDialog.answers});
+
+        saveDialogs(listDialogs().map(d => d.id === id ? updatedDialog : d));
+        next();
+    });
+};
+
 const addStartDialog = () => {
     const dialogs = listDialogs().filter(d => d.id !== START_CONV_ID);
     dialogs.push(makeNewDialog("Aan de slag", "", START_CONV_ID));
@@ -217,6 +232,6 @@ const importFile = (dialogs) => {
 };
 
 module.exports = {
-    addDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer, removeAnswer,
-    updateAnswer, addStartDialog, importFile, START_CONV_ID
+    addDialog, updateDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer,
+    removeAnswer, updateAnswer, addStartDialog, importFile, START_CONV_ID
 };

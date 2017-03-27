@@ -17,6 +17,21 @@ const addDialog = (userText, next) => (dispatch) =>
         next(resp.headers['x-uuid']);
     });
 
+const updateDialog = (userText, id) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/${id}/update`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({userText: userText})
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
+
 const addStartDialog = () => (dispatch) =>
     xhr({
         method: 'POST',
@@ -30,7 +45,6 @@ const addStartDialog = () => (dispatch) =>
             type: ActionTypes.RECEIVE_DIALOGS,
             dialogs: JSON.parse(body)
         });
-//        next(resp.headers['x-uuid']);
     });
 
 const fetchDialogs = (next = () => {}) => (dispatch) =>
@@ -149,5 +163,5 @@ const importDialogFile = (data) => (dispatch) =>
     });
 
 
-export { addDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer,
+export { addDialog, updateDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer,
     removeAnswer, importDialogFile, addStartDialog, updateAnswer  }

@@ -3,6 +3,7 @@ import AnswerForm from "./answer-form";
 import AnswerList from "./answer-list";
 import DialogTree from "./dialog-tree";
 import VariableList from "./variable-list";
+import AddDialog from "./add-dialog";
 class DialogEdit extends React.Component {
 
     constructor(props) {
@@ -60,7 +61,7 @@ class DialogEdit extends React.Component {
         if (typeof dialog === 'undefined') { return null; }
 
         const { tagAnalysis, userText } = dialog;
-        const { onSwapUp, onSwapDown, onRemoveAnswer, onUpdateAnswer } = this.props;
+        const { onSwapUp, onSwapDown, onRemoveAnswer, onUpdateAnswer, onUpdateDialog } = this.props;
 
         return (
             <div className="panel panel-default col-md-25 col-sm-23 col-xs-21">
@@ -73,19 +74,33 @@ class DialogEdit extends React.Component {
                             <div className="col-md-8" />
                             <div className="col-md-23 text-right">
                                 <h4><i>Gebruiker</i></h4>
-                                {tagAnalysis.map((word, i) => (
-                                    <span key={i}
-                                          onClick={() => this.props.onTogglePartOfMatchPhrase(dialog.id, word.exact)}
-                                          className={`label ${word.selected
-                                              ? word.exact === "%" ? "label-success" : "label-primary"
-                                              : "label-default"
-                                          }`} style={{marginRight: 4, cursor: "pointer"}}>
-                                        {word.exact}
-                                    </span>
-                                ))}
-                                <span className="label label-primary">
-                                    {tagAnalysis.length === 0 ? userText : null }
-                                </span>
+                                <div className="row" style={{height: "1em"}}>
+                                    <div className="col-md-28 col-sm-28 col-xs-28">
+                                        {tagAnalysis.map((word, i) => (
+                                            <span key={i}
+                                                  onClick={() => this.props.onTogglePartOfMatchPhrase(dialog.id, word.exact)}
+                                                  className={`label ${word.selected
+                                                      ? word.exact === "%" ? "label-success" : "label-primary"
+                                                      : "label-default"
+                                                  }`} style={{marginRight: 4, cursor: "pointer"}}>
+                                                {word.exact}
+                                            </span>
+                                        ))}
+                                        <span className="label label-primary">
+                                            {tagAnalysis.length === 0 ? userText : null }
+                                        </span>
+                                    </div>
+                                    <div className="col-md-4 col-sm-4 col-xs-4">
+                                        <span style={{position: "relative", top: "-4px"}}>
+                                            <AddDialog className="btn btn-default btn-xs"
+                                                       label="Aanpassen"
+                                                       placeholder="Nieuwe tekst..."
+                                                       userText={userText}
+                                                       onAddDialog={(userText) => onUpdateDialog(userText, dialog.id)}
+                                            />
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="row">
