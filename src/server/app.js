@@ -1,4 +1,5 @@
 const config = {
+        "appId": process.env.FB_APP_ID,
         "appSecret": process.env.MESSENGER_APP_SECRET,
         "pageAccessToken": process.env.MESSENGER_PAGE_ACCESS_TOKEN,
         "validationToken": process.env.MESSENGER_VALIDATION_TOKEN,

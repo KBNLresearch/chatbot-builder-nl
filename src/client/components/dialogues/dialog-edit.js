@@ -91,14 +91,12 @@ class DialogEdit extends React.Component {
                                         </span>
                                     </div>
                                     <div className="col-md-4 col-sm-4 col-xs-4">
-                                        <span style={{position: "relative", top: "-4px"}}>
-                                            <AddDialog className="btn btn-default btn-xs"
-                                                       label="Aanpassen"
-                                                       placeholder="Nieuwe tekst..."
-                                                       userText={userText}
-                                                       onAddDialog={(userText) => onUpdateDialog(userText, dialog.id)}
-                                            />
-                                        </span>
+                                        <AddDialog className="btn btn-default btn-xs"
+                                                   label="Aanpassen"
+                                                   placeholder="Nieuwe tekst..."
+                                                   userText={userText}
+                                                   onAddDialog={(userText) => onUpdateDialog(userText, dialog.id)}
+                                        />
                                     </div>
                                 </div>
                             </div>
