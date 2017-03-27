@@ -149,7 +149,7 @@ app.get('/login', (req, res) => {
     res.set('Location', `https://www.facebook.com/v2.8/dialog/oauth?` +
         `client_id=${config.appId}` +
         `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
-        `&response_type=code&response_type=granted_scopes`);
+        `&response_type=code`);
     res.end();
 });
 
