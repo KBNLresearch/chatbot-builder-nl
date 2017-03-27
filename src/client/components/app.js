@@ -1,10 +1,11 @@
 import React from "react";
 import DialogIndex from "./dialogues/dialog-index";
+import AddDialog from "./dialogues/add-dialog";
 
 class App extends React.Component {
 
     render() {
-        const { onUpload } = this.props;
+        const { onUpload, onSetGreeting } = this.props;
         return (
             <div>
                 <div className="navbar navbar-default">
@@ -19,6 +20,9 @@ class App extends React.Component {
                         <ul className="list-group col-md-6 col-sm-8 col-xs-10">
                             <li className="list-group-item">
                                 <h5>Welkomstboodschap</h5>
+                                <AddDialog onAddDialog={onSetGreeting}
+                                           label="Pas welkomstboodschap aan"
+                                           placeholder="Welkomstboodschap..."/>
                             </li>
                             <DialogIndex dialogs={this.props.dialogs}
                                          onRemoveDialog={this.props.onRemoveDialog}

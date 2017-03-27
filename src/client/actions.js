@@ -1,9 +1,11 @@
 import { addDialog, updateDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer,
-    importDialogFile, addStartDialog, updateAnswer } from "./actions/dialogs";
+    importDialogFile, addStartDialog, updateAnswer, setGreeting } from "./actions/dialogs";
 
 
 export default function actionsMaker(navigateTo, dispatch) {
     return {
+        onSetGreeting: (greeting) => dispatch(setGreeting(greeting)),
+
         onAddDialog: (userText) => dispatch(addDialog(userText, (id) => navigateTo('dialogEdit', [id]))),
         onUpdateDialog: (userText, id) => dispatch(updateDialog(userText, id)),
         onCreateStartDialog: () => dispatch(addStartDialog()),

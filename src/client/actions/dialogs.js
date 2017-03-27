@@ -162,6 +162,20 @@ const importDialogFile = (data) => (dispatch) =>
         });
     });
 
+const setGreeting = (greeting) => (dispatch) =>
+    xhr({
+        method: 'PUT',
+        url: `/dialogs/set-greeting`,
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({greeting: greeting})
+    }, (err, resp, body) => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DIALOGS,
+            dialogs: JSON.parse(body)
+        });
+    });
 
 export { addDialog, updateDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer,
-    removeAnswer, importDialogFile, addStartDialog, updateAnswer  }
+    removeAnswer, importDialogFile, addStartDialog, updateAnswer, setGreeting }

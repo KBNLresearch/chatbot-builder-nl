@@ -13,7 +13,8 @@ const
     dialogs = require('./dialogs'),
     fb = require("./fb/fb-lib")(config),
     botHandlers = require("./bot/handlers")(fb),
-    webHook = require("./bot/webhook")(fb, botHandlers);
+    webHook = require("./bot/webhook")(fb, botHandlers),
+    rp = require('request-promise');
 
 const app = express();
 app.set('port', process.env.PORT || 5000);
@@ -39,6 +40,28 @@ app.post('/add-dialog', (req, res) => {
         endResponse(res);
     });
 });
+
+app.put('/dialogs/set-greeting', (req, res) => {
+    const { body: { greeting } } = req;
+
+    rp.post({
+        uri: `https://graph.facebook.com/v2.6/me/thread_settings?access_token=${config.pageAccessToken}`,
+        json: true,
+        body: {
+            setting_type: "greeting",
+            greeting: {
+                text: greeting
+            }
+        }
+    }).then(data => {
+        endResponse(res);
+    }).catch(err => {
+        console.error("Failed to change greeting!", err);
+        endResponse(res);
+    })
+
+});
+
 
 
 app.put('/dialogs/:id/update', (req, res) => {
