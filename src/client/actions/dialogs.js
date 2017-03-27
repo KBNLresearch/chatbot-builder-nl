@@ -47,18 +47,32 @@ const addStartDialog = () => (dispatch) =>
         });
     });
 
-const fetchDialogs = (next = () => {}) => (dispatch) =>
+const fetchDialogs = (next = () => {}) => (dispatch) => {
+
     xhr({
         method: 'GET',
-        url: '/dialogs',
+        url: `/check-token?token=${localStorage.getItem('token')}`
     }, (err, resp, body) => {
-        dispatch({
-            type: ActionTypes.RECEIVE_DIALOGS,
-            dialogs: JSON.parse(body)
-        });
+        const { tokenOk, name } = JSON.parse(body);
 
+        if (tokenOk === true) {
+            dispatch({type: ActionTypes.SET_USERNAME, name: name});
+            xhr({
+                method: 'GET',
+                url: '/dialogs',
+            }, (err, resp, body) => {
+                dispatch({
+                    type: ActionTypes.RECEIVE_DIALOGS,
+                    dialogs: JSON.parse(body)
+                });
+            });
+        } else {
+            dispatch({type: ActionTypes.SET_USERNAME, name: null});
+        }
         next();
-    });
+
+    })
+};
 
 const removeDialog = (uuid) => (dispatch) =>
     xhr({

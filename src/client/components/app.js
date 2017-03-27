@@ -5,8 +5,9 @@ import AddDialog from "./dialogues/add-dialog";
 class App extends React.Component {
 
     render() {
-        const { onUpload, onSetGreeting } = this.props;
-        return (
+        const { onUpload, onSetGreeting, user: {username} } = this.props;
+
+        const body = username ? (
             <div className="container container-fluid">
                 <div className="row">
                     <ul className="list-group col-md-6 col-sm-8 col-xs-10">
@@ -34,6 +35,25 @@ class App extends React.Component {
                     <div className="col-xs-1 col-md-1 col-sm-1" />
                     {this.props.children}
                 </div>
+            </div>
+        ) : (<div className="container"><i>U bent niet ingelogd</i></div>);
+
+        return (
+            <div>
+                <div className="navbar navbar-default">
+                    <div className="container container-fluid">
+                        <div className="navbar-brand">
+                            Chatbot builder
+                        </div>
+                        <div className="navbar-form navbar-right">
+                            {username ? `Ingelogd als ${username}` : (<a href="/login" className="btn btn-default">
+                                Inloggen via facebook
+                            </a>)}
+                        </div>
+                    </div>
+                </div>
+
+                {body}
             </div>
         );
     }

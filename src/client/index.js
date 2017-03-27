@@ -18,16 +18,35 @@ const connectDialogEdit = (state, routed) => ({
     dialog: state.dialogs.filter(d => d.id === routed.params.id)[0]
 });
 
-store.dispatch(fetchDialogs(() =>
-    ReactDOM.render((
-        <Provider store={store}>
-            <Router history={browserHistory}>
-                <Route path="/" component={connectComponent(state => state)(App)}>
-                    <Route path={urls.dialogEdit()} components={connectComponent(connectDialogEdit)(DialogEdit)} />
-                </Route>
-            </Router>
-        </Provider>
-    ), document.getElementById("app"))
-));
 
+
+if (window.location.href.indexOf("token=") > -1) {
+    const { token } = window.location.href
+        .replace(/^[^\?]+\?(.*)#/, "$1")
+        .split("&")
+        .map(chunk => ({
+            key: chunk.split("=")[0],
+            value: chunk.split("=")[1]
+        })).reduce((accum, cur) => {
+            accum[cur.key] = cur.value;
+            return accum;
+        }, {});
+
+    localStorage.setItem('token', token);
+    window.location.href = "/";
+} else if (!localStorage.getItem('token')) {
+    window.location.href = "/login";
+} else {
+    store.dispatch(fetchDialogs(() =>
+        ReactDOM.render((
+            <Provider store={store}>
+                <Router history={browserHistory}>
+                    <Route path="/" component={connectComponent(state => state)(App)}>
+                        <Route path={urls.dialogEdit()} components={connectComponent(connectDialogEdit)(DialogEdit)}/>
+                    </Route>
+                </Router>
+            </Provider>
+        ), document.getElementById("app"))
+    ));
+}
 export { urls }

@@ -194,7 +194,7 @@ app.get('/check-token', (req, res) => {
     }).catch(err => {
         console.error(err);
         res.status(401);
-        res.end('{}');
+        res.end('{"tokenOk": false}');
     })
 });
 
