@@ -1,0 +1,9 @@
+web:
+    image: renevanderark/chatbot-builder-web
+    ports:
+      - "5000:5000"
+    env_file: .env
+nlp:
+    image: renevanderark/chatbot-builder-nlp
+    ports:
+      - "5001:5001"
