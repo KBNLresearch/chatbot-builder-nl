@@ -145,6 +145,11 @@ app.put('/dialogs/:id/update-answer', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
+    console.log(`https://www.facebook.com/v2.8/dialog/oauth?` +
+        `client_id=${config.appId}` +
+        `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
+        `&response_type=code`);
+    
     res.status(301);
     res.set('Location', `https://www.facebook.com/v2.8/dialog/oauth?` +
         `client_id=${config.appId}` +
@@ -166,7 +171,6 @@ app.get('/auth', (req, res) => {
         res.set('Location', `/?token=${data.access_token}`);
         res.end()
     }).catch(err => {
-        console.error(err);
         res.end()
     });
 });
