@@ -1,6 +1,7 @@
 const config = {
         "appId": process.env.FB_APP_ID,
         "appSecret": process.env.MESSENGER_APP_SECRET,
+        "pageId": process.env.FB_PAGE_ID,
         "pageAccessToken": process.env.MESSENGER_PAGE_ACCESS_TOKEN,
         "validationToken": process.env.MESSENGER_VALIDATION_TOKEN,
         "serverURL": process.env.SERVER_URL,
@@ -140,14 +141,67 @@ app.put('/dialogs/:id/update-answer', (req, res) => {
     const { body: { answerId, data } } = req;
 
     dialogs.updateAnswer(req.params.id, answerId, data);
-
     endResponse(res);
 });
 
-app.get('*', (req, res) => {
-    res.render('index');
+app.get('/login', (req, res) => {
+    res.status(301);
+    res.set('Location', `https://www.facebook.com/v2.8/dialog/oauth?` +
+        `client_id=${config.appId}` +
+        `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
+        `&response_type=code&response_type=granted_scopes`);
+    res.end();
 });
 
+app.get('/auth', (req, res) => {
+    rp.get({
+        uri: `https://graph.facebook.com/v2.8/oauth/access_token?` +
+            `client_id=${config.appId}` +
+            `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
+            `&client_secret=${config.appSecret}` +
+            `&code=${req.query.code}`,
+        json: true
+    }).then(data => {
+        res.status(301);
+        res.set('Location', `/?token=${data.access_token}`);
+        res.end()
+    }).catch(err => {
+        console.error(err);
+        res.end()
+    });
+});
+
+app.get('/check-token', (req, res) => {
+    res.set('Content-type', 'application/json');
+    rp.get({
+       uri: `https://graph.facebook.com/me/?fields=name,accounts&access_token=${req.query.token}`,
+       json: true
+    }).then(data => {
+        try {
+            if (data.accounts.data.map(p => p.id).indexOf(config.pageId) > -1) {
+                res.status(200);
+                res.end(JSON.stringify({
+                    tokenOk: true,
+                    name: data.name
+                }));
+            } else {
+                res.status(401);
+                res.end('{"tokenOk": false}');
+            }
+        } catch (e) {
+            res.end('{"tokenOk": false}');
+        }
+    }).catch(err => {
+        console.error(err);
+        res.status(401);
+        res.end('{}');
+    })
+});
+
+
+app.get('*', (req, res) => {
+    res.render('index', {token: req.query.token});
+});
 
 app.listen(app.get('port'), () => {
     console.log('Node app is running on port', app.get('port'));
