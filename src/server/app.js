@@ -149,8 +149,8 @@ app.get('/login', (req, res) => {
         `client_id=${config.appId}` +
         `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
         `&response_type=code`);
-    
-    res.status(301);
+
+    res.status(302);
     res.set('Location', `https://www.facebook.com/v2.8/dialog/oauth?` +
         `client_id=${config.appId}` +
         `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
@@ -167,7 +167,7 @@ app.get('/auth', (req, res) => {
             `&code=${req.query.code}`,
         json: true
     }).then(data => {
-        res.status(301);
+        res.status(302);
         res.set('Location', `/?token=${data.access_token}`);
         res.end()
     }).catch(err => {
@@ -196,7 +196,6 @@ app.get('/check-token', (req, res) => {
             res.end('{"tokenOk": false}');
         }
     }).catch(err => {
-        console.error(err);
         res.status(401);
         res.end('{"tokenOk": false}');
     })
