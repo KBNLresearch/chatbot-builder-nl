@@ -34,8 +34,6 @@ if (window.location.href.indexOf("token=") > -1) {
 
     localStorage.setItem('token', token);
     window.location.href = "/";
-} else if (!localStorage.getItem('token')) {
-    window.location.href = "/login";
 } else {
     store.dispatch(fetchDialogs(() =>
         ReactDOM.render((
