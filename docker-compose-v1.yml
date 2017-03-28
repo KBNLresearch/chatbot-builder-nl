@@ -7,3 +7,7 @@ nlp:
     image: renevanderark/chatbot-builder-nlp
     ports:
       - "5001:5001"
+sample_webhook:
+    image: renevanderark/chatbot-builder-sample-webhook
+    ports:
+      - "5002:5002"

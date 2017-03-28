@@ -101,11 +101,39 @@ module.exports = (fb) => {
                             text: applyBindVars(answer.responseText, bindVars),
                             data: answer.buttons.map(b => ({
                                 title: applyBindVars(b.text, bindVars),
-                                payload: [dialogId, b.id]
+                                payload: b.payload || [dialogId, b.id]
                                     .concat(bindVars)
                                     .concat(applyBindVars(b.text, bindVars)).join("|")
                             }))
-                        }))
+                        }));
+
+                    case "webhook":
+                        return rp.post({
+                            uri: applyBindVars(answer.url, bindVars, encodeURIComponent),
+                            json: true,
+                            body: {
+                                payload: [dialogId, answer.id].concat(bindVars).join("|"),
+                                params: bindVars
+                            }
+                        })
+                        .catch(() => {
+                            fb.sendURL(senderID,
+                                "https://github.com/KBNLresearch/chatbot-builder-nl",
+                                `De webhook ${answer.url} lijkt niet goed te werken.`
+                            );
+                            console.error(`Failed reach webhook at ${answer.url}`);
+                        })
+                        .then((returnedAnswers) => {
+                            try {
+                                handleAnswers(senderID, dialogId, returnedAnswers);
+                            } catch (e) {
+                                fb.sendURL(senderID,
+                                    "https://github.com/KBNLresearch/chatbot-builder-nl",
+                                    `De webhook ${answer.url} lijkt niet goed te werken.`
+                                );
+                                console.error(`Failed to use returned answers from webhook at ${answer.url}`, e)
+                            }
+                        })
                 }
             }, curDelay);
             curDelay += answer.responseType === "typing" ? answer.typeDelay : 0;
@@ -151,7 +179,9 @@ module.exports = (fb) => {
                 return;
             }
             const {answers} = dialog;
-            handleAnswers(senderID, dialog.id, answers.filter(a => a.parentId === parentId), bindVars);
+            // if a.parentId matches parentId it is a button postback answer,
+            // else if a.id matches parentId it is a webhook's button postback answer
+            handleAnswers(senderID, dialog.id, answers.filter(a => a.id === parentId || a.parentId === parentId), bindVars);
         }
     };
 

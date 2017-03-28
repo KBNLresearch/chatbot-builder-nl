@@ -95,6 +95,16 @@ class AnswerFormBody extends React.Component {
         </div>)
     }
 
+    webhookFields(disabled, placeholder) {
+        const { url } = this.props;
+        return (<div>
+            <h4>Webadres</h4>
+            <input type="text" className="form-control"
+                   onChange={(ev) => this.props.setParentState({url: ev.target.value})}
+                   value={url} placeholder={placeholder} disabled={disabled} />
+        </div>);
+    }
+
     getSpecFields(disabled) {
         const { responseType } = this.props;
         switch (responseType) {
@@ -104,6 +114,8 @@ class AnswerFormBody extends React.Component {
                 return this.buttonFields(disabled);
             case "url":
                 return this.urlFields(disabled, "Webadres...");
+            case "webhook":
+                return this.webhookFields(disabled, "Webhook adres....");
             case "image":
                 return this.imageFields(disabled, "Webadres van afbeelding...");
             case "typing":
@@ -129,6 +141,7 @@ class AnswerFormBody extends React.Component {
                     <option value="text">Tekst</option>
                     <option value="buttons">Knoppen</option>
                     <option value="url">URL</option>
+                    <option value="webhook">Webhook</option>
                     <option value="image">Afbeelding</option>
                     <option value="typing">Aan het typen</option>
                 </select>

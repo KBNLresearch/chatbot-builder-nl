@@ -1,4 +1,5 @@
 .idea/
+files/
 chatbot-builder-nl.iml
 node_modules/
 npm-debug.log

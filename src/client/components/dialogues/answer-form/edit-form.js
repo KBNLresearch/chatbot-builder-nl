@@ -84,6 +84,8 @@ class AnswerEdit extends React.Component {
                 return this.state.responseText.length > 0 && this.state.buttons.length > 0;
             case "url":
                 return this.state.url.length > 0 && this.state.responseText.length > 0;
+            case "webhook":
+                return this.state.url.length > 0;
             case "image":
                 return this.state.url.length > 0;
             case "typing":

@@ -3,6 +3,7 @@ import TextAnswer from "./answers/text";
 import ButtonAnswer from "./answers/buttons";
 import UrlAnswer from "./answers/url";
 import ImageAnswer from "./answers/image";
+import WebhookAnswer from "./answers/webhook";
 import TypingAnswer from "./answers/typing";
 
 const answerMap = {
@@ -10,7 +11,8 @@ const answerMap = {
     buttons: (props) => <ButtonAnswer {...props} />,
     url: (props) => <UrlAnswer {...props} />,
     image: (props) => <ImageAnswer {...props} />,
-    typing: (props) => <TypingAnswer {...props} />
+    typing: (props) => <TypingAnswer {...props} />,
+    webhook: (props) => <WebhookAnswer {...props} />
 };
 
 class AnswerList extends React.Component {
