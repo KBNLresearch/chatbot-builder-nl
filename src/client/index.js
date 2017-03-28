@@ -21,8 +21,8 @@ const connectDialogEdit = (state, routed) => ({
 
 
 if (window.location.href.indexOf("token=") > -1) {
-    const { token } = window.location.href
-        .replace(/^[^\?]+\?(.*)#/, "$1")
+    const { token } = window.location.search
+        .replace("?", "")
         .split("&")
         .map(chunk => ({
             key: chunk.split("=")[0],

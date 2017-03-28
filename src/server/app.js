@@ -159,6 +159,13 @@ app.put('/dialogs/:id/update-answer', (req, res) => {
 
 
 app.get('/login', (req, res) => {
+    if (process.env.MODE === 'mock') {
+        console.log(`${config.serverURL}/?token=mock_token`);
+        res.status(302);
+        res.set('Location', `${config.serverURL}/?token=mock_token`);
+        return res.end();
+    }
+
     res.status(302);
     res.set('Location', `https://www.facebook.com/v2.8/dialog/oauth?` +
         `client_id=${config.appId}` +

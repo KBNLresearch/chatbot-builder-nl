@@ -2,7 +2,8 @@ const fs = require("fs"),
     uuid = require("uuid"),
     rp = require("request-promise");
 
-const dialogFile = "./files/dialogs.json";
+const fileDir = "./files";
+const dialogFile = `${fileDir}/dialogs.json`;
 
 const START_CONV_ID = "__start_conversation__";
 
@@ -45,6 +46,7 @@ const makeNewAnswer = (data, parentId = null) => ({
 });
 
 const saveDialogs = (dialogs) => {
+    if (!fs.existsSync(fileDir)) { fs.mkdirSync(fileDir); }
     fs.writeFileSync(dialogFile, JSON.stringify(dialogs));
 };
 

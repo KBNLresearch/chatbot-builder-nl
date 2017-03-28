@@ -18,6 +18,13 @@ module.exports = (config) => {
     };
 
     const checkToken = (token, onSuccess, onFailure) => {
+        if (token === 'mock_token' && process.env.MODE === 'mock') {
+            return onSuccess({
+                name: 'Mock User',
+                tokenOk: true
+            });
+        }
+
         if (typeof token === 'undefined') {
             return onFailure({tokenOk: false});
         }
