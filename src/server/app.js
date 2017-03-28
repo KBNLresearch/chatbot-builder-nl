@@ -204,6 +204,15 @@ app.get('/check-token', (req, res) => {
     })
 });
 
+if (process.env.PROXY_A_WEBHOOK) {
+    app.post('/proxy-a-webhook', (req, res) => {
+       rp.post({
+           uri: process.env.PROXY_A_WEBHOOK,
+           json: true,
+           body: req.body
+       }).then(data => res.send(data));
+    });
+}
 
 app.get('*', (req, res) => {
     res.render('index', {token: req.query.token});
