@@ -14,6 +14,7 @@ const
     express = require('express'),
     dialogs = require('./dialogs'),
     fb = require("./fb/fb-lib")(config),
+    tokens = require('./fb/tokens')(config),
     botHandlers = require("./bot/handlers")(fb),
     webHook = require("./bot/webhook")(fb, botHandlers),
     rp = require('request-promise');
@@ -173,41 +174,13 @@ app.get('/auth', (req, res) => {
 
 app.get('/check-token', (req, res) => {
     res.set('Content-type', 'application/json');
-    rp.get({
-       uri: `https://graph.facebook.com/me/?fields=name&access_token=${req.query.token}`,
-       json: true
-    }).then(data => {
-        const {name, id } = data;
-        console.log("USERNAME=", name);
-        console.log("USER_ID=", id);
-        rp.get({
-            uri: `https://graph.facebook.com/${config.pageId}/roles?access_token=${config.pageAccessToken}`,
-            json: true
-        }).then(pageData => {
-            const { data: pageRoles } = pageData;
-            const maintainers = pageRoles
-                .filter(role => role.perms.indexOf("ADMINISTER") > -1 || role.perms.indexOf("CREATE_CONTENT") > -1);
 
-            if (maintainers.find(m => m.id === id)) {
-                res.status(200);
-                res.end(JSON.stringify({
-                    name: name,
-                    tokenOk: true
-                }));
-            } else {
-                res.status(401);
-                res.end('{"tokenOk": false}');
-            }
-
-
-        }).catch(err => {
-            res.status(401);
-            res.end('{"tokenOk": false}');
-        });
-
-    }).catch(err => {
+    tokens.checkToken(req.query.token, (payload) => {
+        res.status(200);
+        res.end(JSON.stringify(payload));
+    }, (payload) => {
         res.status(401);
-        res.end('{"tokenOk": false}');
+        res.end(JSON.stringify(payload));
     })
 });
 
