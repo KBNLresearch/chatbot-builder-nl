@@ -27,7 +27,10 @@ Navigeer naar [http://localhost:5000](http://localhost:5000)
 - startknop dialoog
 - import / export
 
-## Facebook integratie
+## De tool testen met commando's in ```./etc```
+
+
+## Facebook integratie en deployment
 
 - developer account
 - app aanmaken
