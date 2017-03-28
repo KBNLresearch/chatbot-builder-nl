@@ -145,11 +145,6 @@ app.put('/dialogs/:id/update-answer', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    console.log(`https://www.facebook.com/v2.8/dialog/oauth?` +
-        `client_id=${config.appId}` +
-        `&redirect_uri=${encodeURI(config.serverURL + "/auth")}` +
-        `&response_type=code`);
-
     res.status(302);
     res.set('Location', `https://www.facebook.com/v2.8/dialog/oauth?` +
         `client_id=${config.appId}` +
@@ -159,7 +154,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/auth', (req, res) => {
-    console.log("CODE=", req.query.code);
     rp.get({
         uri: `https://graph.facebook.com/v2.8/oauth/access_token?` +
             `client_id=${config.appId}` +
@@ -178,28 +172,39 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/check-token', (req, res) => {
-    console.log("CHECK=", `https://graph.facebook.com/me/?fields=name,accounts&access_token=${req.query.token}`);
-
     res.set('Content-type', 'application/json');
     rp.get({
-       uri: `https://graph.facebook.com/me/?fields=name,accounts&access_token=${req.query.token}`,
+       uri: `https://graph.facebook.com/me/?fields=name&access_token=${req.query.token}`,
        json: true
     }).then(data => {
-        console.log("RESP=", JSON.stringify(data, null, 2));
-        try {
-            if (data.accounts.data.map(p => p.id).indexOf(config.pageId) > -1) {
+        const {name, id } = data;
+        console.log("USERNAME=", name);
+        console.log("USER_ID=", id);
+        rp.get({
+            uri: `https://graph.facebook.com/${config.pageId}/roles?access_token=${config.pageAccessToken}`,
+            json: true
+        }).then(pageData => {
+            const { data: pageRoles } = pageData;
+            const maintainers = pageRoles
+                .filter(role => role.perms.indexOf("ADMINISTER") > -1 || role.perms.indexOf("CREATE_CONTENT") > -1);
+
+            if (maintainers.find(m => m.id === id)) {
                 res.status(200);
                 res.end(JSON.stringify({
-                    tokenOk: true,
-                    name: data.name
+                    name: name,
+                    tokenOk: true
                 }));
             } else {
                 res.status(401);
                 res.end('{"tokenOk": false}');
             }
-        } catch (e) {
+
+
+        }).catch(err => {
+            res.status(401);
             res.end('{"tokenOk": false}');
-        }
+        });
+
     }).catch(err => {
         res.status(401);
         res.end('{"tokenOk": false}');
