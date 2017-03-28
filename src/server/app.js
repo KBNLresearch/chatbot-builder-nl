@@ -25,6 +25,17 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json({verify: fb.verifyRequestSignature}));
 
+app.use(tokens.filterMiddleware([
+    '/add-dialog',
+    '/dialogs',
+    '/add-start-dialog'
+]));
+
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+});
+
 app.get(`/webhook`, fb.validateWebhook);
 app.post(`/webhook`, webHook);
 
@@ -87,7 +98,7 @@ app.get('/dialogs', (req, res) => {
     endResponse(res);
 });
 
-app.get('/dialogs/download', (req, res) => {
+app.get('/download-dialog', (req, res) => {
     res.set('Content-Disposition', 'attachment; filename="dialog-export.txt"')
     endResponse(res);
 });
@@ -144,6 +155,8 @@ app.put('/dialogs/:id/update-answer', (req, res) => {
     dialogs.updateAnswer(req.params.id, answerId, data);
     endResponse(res);
 });
+
+
 
 app.get('/login', (req, res) => {
     res.status(302);

@@ -18,22 +18,22 @@ module.exports = (config) => {
     };
 
     const checkToken = (token, onSuccess, onFailure) => {
+        if (typeof token === 'undefined') {
+            return onFailure({tokenOk: false});
+        }
         const cToken = tokenCache.find(c => c.token === token);
         if (cToken) {
-            console.log("token found in cache for ", cToken.name);
             onSuccess({
                 name: cToken.name,
                 tokenOk: true
             });
         } else {
-            console.log("token not found in cache");
             rp.get({
                 uri: `https://graph.facebook.com/me/?fields=name&access_token=${token}`,
                 json: true
             }).then(data => {
                 const {name, id} = data;
-                console.log("USERNAME=", name);
-                console.log("USER_ID=", id);
+                console.log("LOGGED IN=", name);
                 rp.get({
                     uri: `https://graph.facebook.com/${config.pageId}/roles?access_token=${config.pageAccessToken}`,
                     json: true
@@ -60,8 +60,24 @@ module.exports = (config) => {
         }
     };
 
+    const filterMiddleware = (filterPaths = []) => (req, res, next) => {
+        if (filterPaths.find(p => req.path.indexOf(p) === 0)) {
+            const token = req.header("x-fb-token");
+
+            checkToken(token, () => next(), (payload) => {
+                res.status(401);
+                res.set('Content-type', 'application/json');
+                res.end(JSON.stringify(payload));
+            });
+
+        } else {
+            next();
+        }
+    };
+
     return {
         checkToken: checkToken,
+        filterMiddleware: filterMiddleware
     }
 };
 

@@ -14,18 +14,10 @@ class DialogEdit extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (typeof nextProps.dialog === 'undefined') {
-            this.props.onRedirectToRoot();
-        } else if ((nextProps.dialog || {}).id !== (this.props.dialog || {}).id) {
+        if ((nextProps.dialog || {}).id !== (this.props.dialog || {}).id) {
             this.setState({buttonChoices: []});
         }
 
-    }
-
-    componentDidMount() {
-        if (typeof this.props.dialog === 'undefined') {
-            this.props.onRedirectToRoot();
-        }
     }
 
     setRootButtonChoice(buttonId) {
