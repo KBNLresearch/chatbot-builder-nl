@@ -9,6 +9,7 @@ Maak een file aan genaamd ```.env``` met de volgende inhoud:
 FROG=http://nlp:5001/
 PORT=5000
 MODE=mock
+SERVER_URL=http://localhost:5000
 ```
 
 Start met [docker-compose](https://docs.docker.com/compose/install/)

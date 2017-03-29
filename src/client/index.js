@@ -19,6 +19,28 @@ const connectDialogEdit = (state, routed) => ({
 });
 
 
+// Use a web socket to get status updates
+const connectSocket = () => {
+
+    const webSocket = new WebSocket(globals.wsProtocol + "://" + globals.hostName + "/chat-socket");
+
+    webSocket.onmessage = ({ data }) => {
+        console.log(data);
+    };
+
+    // Keep the websocket alive
+    const pingWs = () => {
+        webSocket.send("* ping! *");
+        window.setTimeout(pingWs, 8000);
+    };
+    webSocket.onopen = pingWs;
+
+    webSocket.onclose = () => {
+        window.setTimeout(connectSocket, 500);
+    }
+};
+
+connectSocket();
 
 if (window.location.href.indexOf("token=") > -1) {
     const { token } = window.location.search
@@ -47,4 +69,5 @@ if (window.location.href.indexOf("token=") > -1) {
         ), document.getElementById("app"))
     ));
 }
+
 export { urls }

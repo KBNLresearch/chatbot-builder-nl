@@ -20,6 +20,8 @@ const
     rp = require('request-promise');
 
 const app = express();
+const expressWs = require('express-ws')(app);
+
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -35,6 +37,12 @@ app.use((req, res, next) => {
     console.log(`${req.method} ${req.path}`);
     next();
 });
+
+app.ws("/chat-socket", (ws) =>
+    ws.on("message", (msg) =>
+        ws.send(msg)
+    )
+);
 
 app.get(`/webhook`, fb.validateWebhook);
 app.post(`/webhook`, webHook);
@@ -215,7 +223,10 @@ if (process.env.PROXY_A_WEBHOOK) {
 }
 
 app.get('*', (req, res) => {
-    res.render('index', {token: req.query.token});
+    res.render('index', {
+        hostName: config.serverURL.replace(/^.*:\/\//, ""),
+        wsProtocol: process.env.WS_PROTOCOL || "ws"
+    });
 });
 
 app.listen(app.get('port'), () => {
