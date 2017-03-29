@@ -21,14 +21,14 @@ Navigeer naar [http://localhost:5000](http://localhost:5000)
 
 ## Hoe werkt de tool
 
+- import / export
+- emulator
 - dialoog aanmaken
 - beschrijving antwoordtypes
 - variabelen en vrije invoer
 - welkomstboodschap
 - startknop dialoog
-- import / export
 
-## De tool testen met commando's in ```./etc```
 
 
 ## Facebook integratie en deployment
@@ -39,6 +39,8 @@ Navigeer naar [http://localhost:5000](http://localhost:5000)
 - pagina aanmaken
 - messenger knop toevoegen aan pagina
 - .env file configureren / uitproberen op heroku
+- De tool testen met commando's in ```./etc```
+
 
 ## Starten zonder docker
 
