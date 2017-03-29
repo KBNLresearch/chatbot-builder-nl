@@ -94,27 +94,35 @@ const addStartDialog = () => {
     saveDialogs(dialogs);
 
     rp.post({
-        uri: `https://graph.facebook.com/v2.6/me/thread_settings?access_token=${process.env.MESSENGER_PAGE_ACCESS_TOKEN}`,
+        uri: `https://graph.facebook.com/v2.6/me/messenger_profile?access_token=${process.env.MESSENGER_PAGE_ACCESS_TOKEN}`,
         body: {
-            "setting_type":"call_to_actions",
-            "thread_state":"new_thread",
-            "call_to_actions":[
-                {
-                    "payload": START_CONV_ID
-                }
-            ]
+            "get_started":{
+                "payload": START_CONV_ID
+            }
         },
         json: true
     }).catch((err) =>
         console.error(err, JSON.stringify(err, null, 2))
     ).then((body) =>
-        console.log("Call to actions succeeded: ", JSON.stringify(body, null, 2))
+        console.log("Created get started button: ", JSON.stringify(body, null, 2))
     )
 };
 
 const removeDialog = (id) => {
     const dialogs = listDialogs();
-
+    if (id === START_CONV_ID) {
+        rp.delete({
+            uri: `https://graph.facebook.com/v2.6/me/messenger_profile?access_token=${process.env.MESSENGER_PAGE_ACCESS_TOKEN}`,
+            body: {
+                "fields": ["get_started"]
+            },
+            json: true
+        }).catch((err) =>
+            console.error(err, JSON.stringify(err, null, 2))
+        ).then((body) =>
+            console.log("Deleted get started button: ", JSON.stringify(body, null, 2))
+        )
+    }
     saveDialogs(dialogs.filter(dialog => dialog.id !== id));
 };
 
