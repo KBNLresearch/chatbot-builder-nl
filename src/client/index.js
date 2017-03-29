@@ -6,50 +6,27 @@ import actions from "./actions";
 import ReactDOM from "react-dom";
 import App from "./components/app"
 import DialogEdit from "./components/dialogues/dialog-edit";
+import ChatEmulator from "./components/dialogues/chat-emulator";
+
 import {fetchDialogs} from "./actions/dialogs";
-import uuid from "uuid";
+import connectSocket from "./socket";
 import urls from "./urls";
+
+const sendToSocket = connectSocket();
 
 const navigateTo = (key, args) => browserHistory.push(urls[key].apply(null, args));
 
-const connectComponent = (stateToProps) => connect(stateToProps, dispatch => actions(navigateTo, dispatch));
+const connectComponent = (stateToProps) => connect(stateToProps, dispatch => actions(navigateTo, dispatch, sendToSocket));
 
 const connectDialogEdit = (state, routed) => ({
     dialog: state.dialogs.filter(d => d.id === routed.params.id)[0]
 });
 
+const connectChatEmulator = (state) => ({
+    chat: state.chat
+});
 
-const senderID = uuid();
-// Use a web socket to get status updates
-const connectSocket = () => {
 
-    const webSocket = new WebSocket(globals.wsProtocol + "://" + globals.hostName + "/chat-socket");
-
-    webSocket.onmessage = ({ data }) => {
-        console.log(data);
-    };
-
-    // Keep the websocket alive
-    const pingWs = () => {
-        webSocket.send("* ping! *");
-        window.setTimeout(pingWs, 8000);
-    };
-
-    webSocket.onopen = () => {
-        pingWs();
-        webSocket.send(JSON.stringify({
-            senderID: senderID,
-            type: "text",
-            data: "Zoek: test"
-        }))
-    };
-
-    webSocket.onclose = () => {
-        window.setTimeout(connectSocket, 500);
-    }
-};
-
-connectSocket();
 
 if (window.location.href.indexOf("token=") > -1) {
     const { token } = window.location.search
@@ -71,7 +48,8 @@ if (window.location.href.indexOf("token=") > -1) {
             <Provider store={store}>
                 <Router history={browserHistory}>
                     <Route path="/" component={connectComponent(state => state)(App)}>
-                        <Route path={urls.dialogEdit()} components={connectComponent(connectDialogEdit)(DialogEdit)}/>
+                        <Route path={urls.dialogEdit()} components={connectComponent(connectDialogEdit)(DialogEdit)} />
+                        <Route path={urls.testDialog()} components={connectComponent(connectChatEmulator)(ChatEmulator)} />
                     </Route>
                 </Router>
             </Provider>

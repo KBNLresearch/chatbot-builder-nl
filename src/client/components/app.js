@@ -1,6 +1,8 @@
 import React from "react";
 import DialogIndex from "./dialogues/dialog-index";
 import AddDialog from "./dialogues/add-dialog";
+import {Link} from "react-router";
+import urls from "../urls";
 
 class App extends React.Component {
 
@@ -12,9 +14,15 @@ class App extends React.Component {
                 <div className="row">
                     <ul className="list-group col-md-6 col-sm-8 col-xs-10">
                         <li className="list-group-item">
+                            <h5>Chatbot testen</h5>
+                            <Link to={urls.testDialog()} className="btn btn-default">
+                                Open emulator
+                            </Link>
+                        </li>
+                        <li className="list-group-item">
                             <h5>Welkomstboodschap</h5>
                             <AddDialog onAddDialog={onSetGreeting}
-                                       label="Pas welkomstboodschap aan"
+                                       label="Instellen"
                                        placeholder="Welkomstboodschap..."/>
                         </li>
                         <DialogIndex dialogs={this.props.dialogs}

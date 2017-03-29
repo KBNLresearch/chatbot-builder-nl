@@ -7,7 +7,8 @@ class TypingAnswer extends React.Component {
         const { responseText, responseDelay, typeDelay } = this.props;
         return (
             <AnswerWrapper {...this.props}>
-                <span className="label label-default">{responseText}</span> <i>(na {responseDelay} milliseconden en duurt {typeDelay})</i>
+                <span className="label label-default">{responseText}</span>{" "}
+                <i>(na {responseDelay} milliseconden en duurt {typeDelay})</i>
             </AnswerWrapper>
         );
     }

@@ -1,11 +1,49 @@
 module.exports = (webSocket) => {
 
-    const sendTypingOn = (...args) => webSocket.send(JSON.stringify({type: 'sendTypingOn', data: args}));
-    const sendTypingOff =  (...args) => webSocket.send(JSON.stringify({type: 'sendTypingOff', data: args}));
-    const sendURL = (...args) => webSocket.send(JSON.stringify({type: 'sendURL', data: args}));
-    const sendButtonMessage = (...args) => webSocket.send(JSON.stringify({type: 'sendButtonMessage', data: args}));
-    const sendTextMessage = (...args) => webSocket.send(JSON.stringify({type: 'sendTextMessage', data: args}));
-    const sendImageMessage = (...args) => webSocket.send(JSON.stringify({type: 'sendImageMessage', data: args}));
+    const sendData = (payload) => {
+        try {
+            webSocket.send(payload);
+        } catch (e) {
+            console.log("failed to send to socket");
+        }
+    };
+
+    const sendTypingOn = (recipientID) => sendData(JSON.stringify({type: 'sendTypingOn', recipientID: recipientID}));
+    const sendTypingOff =  (recipientID) => sendData(JSON.stringify({type: 'sendTypingOff', recipientID: recipientID}));
+
+    const sendTextMessage = (recipientID, text) => sendData(JSON.stringify({
+        type: 'sendTextMessage',
+        recipientID: recipientID,
+        data: {
+            responseText: text
+        }
+    }));
+
+    const sendURL = (recipientID, url, text) => sendData(JSON.stringify({
+        type: 'sendURL',
+        recipientID: recipientID,
+        data: {
+            responseText: text,
+            url: url
+        }
+    }));
+
+    const sendButtonMessage = (recipientID, {text, data}) => sendData(JSON.stringify({
+        type: 'sendButtonMessage',
+        recipientID: recipientID,
+        data: {
+            responseText: text,
+            buttons: data
+        }
+    }));
+
+    const sendImageMessage = (recipientID, url) => sendData(JSON.stringify({
+        type: 'sendImageMessage',
+        recipientID: recipientID,
+        data: {
+            url: url
+        }
+    }));
 
     return {
         sendTypingOn: sendTypingOn,

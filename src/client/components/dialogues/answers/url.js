@@ -10,7 +10,7 @@ class UrlAnswer extends React.Component {
             <AnswerWrapper {...this.props}>
                 {highlightVars(responseText)}  <i>(na {responseDelay} milliseconden)</i><br />
                 <a className="btn btn-default btn-xs" href={url} target="_blank">
-                    Lees verder ({highlightVars(url)})
+                    Lees verder <i>({highlightVars(url)})</i>
                 </a>
             </AnswerWrapper>
         );

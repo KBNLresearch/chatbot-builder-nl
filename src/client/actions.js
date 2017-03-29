@@ -1,8 +1,9 @@
 import { addDialog, updateDialog, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer, removeAnswer,
     importDialogFile, addStartDialog, updateAnswer, setGreeting } from "./actions/dialogs";
 
+import ActionTypes from "./action-types";
 
-export default function actionsMaker(navigateTo, dispatch) {
+export default function actionsMaker(navigateTo, dispatch, sendToSocket) {
     return {
         onSetGreeting: (greeting) => dispatch(setGreeting(greeting)),
 
@@ -19,6 +20,18 @@ export default function actionsMaker(navigateTo, dispatch) {
         onSwapDown: (answerId, dialogId) => dispatch(swapAnswer(answerId, dialogId, "down")),
         onRemoveAnswer: (answerId, dialogId) => dispatch(removeAnswer(answerId, dialogId)),
         onUpdateAnswer: (dialogId, answerId, data) => dispatch(updateAnswer(dialogId, answerId, data)),
+
+        onClearChat: () => dispatch({type: ActionTypes.CLEAR_CHAT }),
+        onSendChatMessage: (type, data, buttonText) => {
+            dispatch({
+                type: ActionTypes.RECEIVE_CHAT_RESPONSE,
+                responseType: "userMessage",
+                responseData: {
+                    responseText: buttonText || data,
+                }
+            });
+            sendToSocket(type, data)
+        },
 
         onUpload: (ev) => {
             const reader = new FileReader();

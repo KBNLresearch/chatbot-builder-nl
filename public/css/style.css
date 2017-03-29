@@ -19,6 +19,21 @@
     color: #337ab7;
 }
 
+.chat {
+    font-size: 1.5em;
+}
+
+.chat i {
+    display: none
+}
+
+.chat .answer .tools {
+    display: none
+}
+
+.chat .answer:hover {
+    background: none;
+}
 
 @media (min-width:992px) {
     .conversation {
