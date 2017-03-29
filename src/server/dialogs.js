@@ -4,6 +4,7 @@ const fs = require("fs"),
 
 const fileDir = "./files";
 const dialogFile = `${fileDir}/dialogs.json`;
+const greetingFile = `${fileDir}/greeting.txt`;
 
 const START_CONV_ID = "__start_conversation__";
 
@@ -48,6 +49,19 @@ const makeNewAnswer = (data, parentId = null) => ({
 const saveDialogs = (dialogs) => {
     if (!fs.existsSync(fileDir)) { fs.mkdirSync(fileDir); }
     fs.writeFileSync(dialogFile, JSON.stringify(dialogs));
+};
+
+const saveGreeting = (greeting) => {
+    if (!fs.existsSync(fileDir)) { fs.mkdirSync(fileDir); }
+    fs.writeFileSync(greetingFile, greeting);
+};
+
+const loadGreeting = () => {
+    if (fs.existsSync(greetingFile)) {
+        return fs.readFileSync(greetingFile).toString('utf8');
+    } else {
+        return ""
+    }
 };
 
 const listDialogs = () => {
@@ -243,5 +257,6 @@ const importFile = (dialogs) => {
 
 module.exports = {
     addDialog, updateDialog, listDialogs, removeDialog, togglePhrasePart, addAnswer, transformAnalysis, swapAnswer,
-    removeAnswer, updateAnswer, addStartDialog, importFile, START_CONV_ID
+    removeAnswer, updateAnswer, addStartDialog, importFile, START_CONV_ID,
+    saveGreeting, loadGreeting
 };

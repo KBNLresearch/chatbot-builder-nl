@@ -48,6 +48,16 @@ const addStartDialog = () => (dispatch) =>
         body: JSON.stringify({})
     }, (err, resp, body) => dispatch(receiveDialogs(body, resp.statusCode)));
 
+const fetchGreeting = () => (dispatch) =>
+    xhr({
+        method: 'GET',
+        url: '/dialogs/get-greeting',
+        headers: {
+            'x-fb-token': localStorage.getItem('token')
+        }
+    }, (err, resp, body) => dispatch({type: ActionTypes.SET_GREETING, ...JSON.parse(body)}));
+
+
 const fetchDialogs = (next = () => {}) => (dispatch) => {
 
     xhr({
@@ -65,6 +75,8 @@ const fetchDialogs = (next = () => {}) => (dispatch) => {
                     'x-fb-token': localStorage.getItem('token')
                 }
             }, (err, resp, body) => dispatch(receiveDialogs(body, resp.statusCode)));
+
+            dispatch(fetchGreeting());
         } else {
             dispatch({type: ActionTypes.SET_USERNAME, name: null});
         }
@@ -158,7 +170,10 @@ const setGreeting = (greeting) => (dispatch) =>
             'x-fb-token': localStorage.getItem('token')
         },
         body: JSON.stringify({greeting: greeting})
-    }, (err, resp, body) => dispatch(receiveDialogs(body, resp.statusCode)));
+    }, (err, resp, body) => {
+        dispatch(fetchGreeting());
+        dispatch(receiveDialogs(body, resp.statusCode));
+    });
 
 export { addDialog, updateDialog, fetchDialogs, removeDialog, togglePartOfMatchPhrase, addAnswer, swapAnswer,
     removeAnswer, importDialogFile, addStartDialog, updateAnswer, setGreeting }

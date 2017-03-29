@@ -6,6 +6,8 @@ import ButtonAnswer from "./answers/buttons";
 import ImageAnswer from "./answers/image";
 import UrlAnswer from "./answers/url";
 
+const START_CONV_ID = "__start_conversation__";
+
 const handlers = {
     onSwapUp: () => { },
     onSwapDown: () => { },
@@ -49,11 +51,46 @@ class ChatEmulator extends React.Component {
 
     render() {
         const { onSendChatMessage, onClearChat } = this.props;
-        const { responses, typingOn } = this.props.chat;
+        const { responses, typingOn, greeting, hasStartButton } = this.props.chat;
         const typing = typingOn ? <Typing {...handlers} responseText="..." /> : null;
+
+        const conversation = responses.length > 0
+            ? responses.map((response, i) => answerMap[response.responseType]({
+                ...handlers,
+                onSelectButton: (payload) => onSendChatMessage("postback", payload,
+                    (response.responseData.buttons.filter(b => b.payload === payload)[0] || {}).title),
+                key: i,
+                responseText: response.responseData.responseText,
+                url: response.responseData.url,
+                responseDelay: 0,
+                buttons: (response.responseData.buttons || []).map(b => ({
+                    text: b.title,
+                    id: b.payload
+                }))
+            }))
+            : <div className="text-center" style={{color: "#999"}}>{greeting}</div>;
+
+        const footer = responses.length === 0 && hasStartButton
+            ? (<div className="text-center" style={{marginTop: "6px"}}>
+                <a style={{cursor: "pointer", fontSize: "1.2em"}}
+                   onClick={() => onSendChatMessage("postback", START_CONV_ID, "Aan de slag")}>
+                    Aan de slag
+                </a>
+            </div>) : (<div className="input-group">
+                <input className="form-control" type="text" placeholder="Typ een bericht..."
+                       value={this.state.msg}
+                       onChange={(ev) => this.setState({msg: ev.target.value})}
+                       onKeyPress={(ev) => ev.key === 'Enter' ? this.sendMsg() : false}
+                />
+                <span className="input-group-addon" style={{cursor: "pointer"}} onClick={() => this.sendMsg()}>
+                    <span className="glyphicon glyphicon-send" style={{cursor: "pointer"}} />
+                </span>
+            </div>);
+
+
         return (
             <div className="panel panel-default col-md-12 col-sm-16 col-xs-21"
-                 style={{height: window.innerHeight - 100}}>
+                 style={{height: window.innerHeight - 100, maxHeight: 568 }}>
                 <div className="panel-heading">
                     <span className="glyphicon glyphicon-trash pull-right"
                           onClick={onClearChat}
@@ -61,33 +98,11 @@ class ChatEmulator extends React.Component {
                     Chat emulator
                 </div>
                 <div className="panel-body chat" style={{height: "calc(100% - 87px)", overflowY: "auto"}}>
-                    {responses.map((response, i) => answerMap[response.responseType]({
-                            ...handlers,
-                            onSelectButton: (payload) => onSendChatMessage("postback", payload,
-                                (response.responseData.buttons.filter(b => b.payload === payload)[0] || {}).title),
-                            key: i,
-                            responseText: response.responseData.responseText,
-                            url: response.responseData.url,
-                            responseDelay: 0,
-                            buttons: (response.responseData.buttons || []).map(b => ({
-                                text: b.title,
-                                id: b.payload
-                            }))
-                    }))}
+                    {conversation}
                     {typing}
                 </div>
-                <div className="panel-footer">
-                    <div className="input-group">
-                        <input className="form-control" type="text" placeholder="Typ een bericht..."
-                                value={this.state.msg}
-                                onChange={(ev) => this.setState({msg: ev.target.value})}
-                               onKeyPress={(ev) => ev.key === 'Enter' ? this.sendMsg() : false}
-                        />
-                        <span className="input-group-addon" style={{cursor: "pointer"}}
-                              onClick={() => this.sendMsg()}>
-                            <span className="glyphicon glyphicon-send" style={{cursor: "pointer"}} />
-                        </span>
-                    </div>
+                <div className="panel-footer" style={{height: "50px"}}>
+                    {footer}
                 </div>
             </div>
         )

@@ -12,6 +12,8 @@ import {fetchDialogs} from "./actions/dialogs";
 import connectSocket from "./socket";
 import urls from "./urls";
 
+const START_CONV_ID = "__start_conversation__";
+
 const sendToSocket = connectSocket();
 
 const navigateTo = (key, args) => browserHistory.push(urls[key].apply(null, args));
@@ -23,7 +25,10 @@ const connectDialogEdit = (state, routed) => ({
 });
 
 const connectChatEmulator = (state) => ({
-    chat: state.chat
+    chat: {
+        ...state.chat,
+        hasStartButton: state.dialogs.map(d => d.id).indexOf(START_CONV_ID) > -1
+    }
 });
 
 

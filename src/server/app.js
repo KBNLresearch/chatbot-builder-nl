@@ -81,8 +81,14 @@ app.post('/add-dialog', (req, res) => {
     });
 });
 
+let mockGreeting = null;
 app.put('/dialogs/set-greeting', (req, res) => {
     const { body: { greeting } } = req;
+
+    dialogs.saveGreeting(greeting);
+    if (process.env.MODE === "mock") {
+        return endResponse(res);
+    }
 
     rp.post({
         uri: `https://graph.facebook.com/v2.6/me/thread_settings?access_token=${config.pageAccessToken}`,
@@ -99,7 +105,12 @@ app.put('/dialogs/set-greeting', (req, res) => {
         console.error("Failed to change greeting!", err);
         endResponse(res);
     })
+});
 
+app.get('/dialogs/get-greeting', (req, res) => {
+    res.contentType("application/json");
+    res.status(200);
+    return res.end(JSON.stringify({greeting: dialogs.loadGreeting()}));
 });
 
 
