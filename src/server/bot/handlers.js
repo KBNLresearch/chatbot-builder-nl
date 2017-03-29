@@ -112,7 +112,7 @@ module.exports = (fb) => {
                             uri: applyBindVars(answer.url, bindVars, encodeURIComponent),
                             json: true,
                             body: {
-                                payload: [dialogId, answer.id].concat(bindVars).join("|"),
+                                payload: [dialogId, answer.id].join("|"),
                                 params: bindVars
                             }
                         })
