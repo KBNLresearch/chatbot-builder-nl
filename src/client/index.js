@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import App from "./components/app"
 import DialogEdit from "./components/dialogues/dialog-edit";
 import {fetchDialogs} from "./actions/dialogs";
-
+import uuid from "uuid";
 import urls from "./urls";
 
 const navigateTo = (key, args) => browserHistory.push(urls[key].apply(null, args));
@@ -19,6 +19,7 @@ const connectDialogEdit = (state, routed) => ({
 });
 
 
+const senderID = uuid();
 // Use a web socket to get status updates
 const connectSocket = () => {
 
@@ -33,7 +34,15 @@ const connectSocket = () => {
         webSocket.send("* ping! *");
         window.setTimeout(pingWs, 8000);
     };
-    webSocket.onopen = pingWs;
+
+    webSocket.onopen = () => {
+        pingWs();
+        webSocket.send(JSON.stringify({
+            senderID: senderID,
+            type: "text",
+            data: "Zoek: test"
+        }))
+    };
 
     webSocket.onclose = () => {
         window.setTimeout(connectSocket, 500);

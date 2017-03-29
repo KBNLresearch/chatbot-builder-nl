@@ -11,7 +11,12 @@ const config = {
 
 const
     bodyParser = require('body-parser'),
-    express = require('express'),
+    express = require('express');
+
+const app = express();
+const expressWs = require('express-ws')(app);
+
+const
     dialogs = require('./dialogs'),
     fb = require("./fb/fb-lib")(config),
     tokens = require('./fb/tokens')(config),
@@ -19,8 +24,7 @@ const
     webHook = require("./bot/webhook")(fb, botHandlers),
     rp = require('request-promise');
 
-const app = express();
-const expressWs = require('express-ws')(app);
+
 
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
@@ -39,9 +43,23 @@ app.use((req, res, next) => {
 });
 
 app.ws("/chat-socket", (ws) =>
-    ws.on("message", (msg) =>
-        ws.send(msg)
-    )
+    ws.on("message", (msg) => {
+        if (msg === "* ping! *") { return; }
+        try {
+            const socketFbShim = require("./bot/socket-fb-shim")(ws);
+            const socketBotHandlers = require("./bot/handlers")(socketFbShim);
+            const {type, senderID, data} = JSON.parse(msg);
+
+            if (type === 'text') {
+                socketBotHandlers.onTextMessage(data, senderID);
+            } else if (type === 'postback') {
+                socketBotHandlers.onPostback(senderID, data);
+            }
+            // ws.send(msg)
+        } catch (e) {
+            console.log(`Could not parse json ${msg}`);
+        }
+    })
 );
 
 app.get(`/webhook`, fb.validateWebhook);
