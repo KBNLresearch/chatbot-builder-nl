@@ -242,12 +242,16 @@ app.get('/check-token', (req, res) => {
 });
 
 if (process.env.PROXY_A_WEBHOOK) {
+
+
     app.post('/proxy-a-webhook', (req, res) => {
-       rp.post({
-           uri: process.env.PROXY_A_WEBHOOK,
+        const idx = req.url.indexOf('?');
+        const queryStr = idx > -1 ? req.url.substr(idx)  : "";
+        rp.post({
+           uri: process.env.PROXY_A_WEBHOOK + queryStr,
            json: true,
            body: req.body
-       }).then(data => res.send(data));
+        }).then(data => res.send(data));
     });
 }
 
