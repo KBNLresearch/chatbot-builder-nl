@@ -31,7 +31,7 @@ class App extends React.Component {
                                      onCreateStartDialog={this.props.onCreateStartDialog} />
                         <li className="list-group-item">
                             <h5>Import / Export</h5>
-                            <a className="btn btn-default" href="/download-dialog">
+                            <a className="btn btn-default" href="/download-dialog" target="_blank">
                                 Export downloaden
                             </a>
 

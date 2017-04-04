@@ -114,7 +114,8 @@ module.exports = (fb) => {
                             json: true,
                             body: {
                                 payload: [dialogId, answer.id].join("|"),
-                                params: bindVars
+                                params: bindVars,
+                                recipientID: senderID
                             }
                         })
                         .catch(() => {
