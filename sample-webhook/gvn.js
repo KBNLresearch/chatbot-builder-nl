@@ -48,8 +48,13 @@ const surpise = ({payload, params, onSucces}) => {
                     responseDelay: 0,
                     url: imgSrc
                 }, {
+                    responseType: "typing",
+                    responseDelay: 0,
+                    typeDelay: 5000,
+                    url: imgSrc
+                }, {
                     responseType: "url",
-                    responseDelay: 200,
+                    responseDelay: 7000,
                     responseText: `Je ziet: ${title}`,
                     url: `http://geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
                 }, {
