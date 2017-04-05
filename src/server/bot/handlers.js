@@ -93,6 +93,9 @@ module.exports = (fb) => {
                         return fb.sendImageMessage(senderID,
                             applyBindVars(answer.url, bindVars, encodeURIComponent));
 
+                    case "imageCarousel":
+                        return fb.sendImageCarousel(senderID, answer.images);
+
                     case "typing":
                         setTimeout(() => { fb.sendTypingOff(senderID); }, answer.typeDelay);
                         return fb.sendTypingOn(senderID);

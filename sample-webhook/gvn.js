@@ -24,6 +24,74 @@ const stripPayload = (payload) => {
     return `${dialogId}|${parentId}`;
 };
 
+
+const search = ({payload, params, query, res, onSucces}) => {
+    const uri = `${GVN_URL}/results?coll=ngvn&query=${encodeURIComponent(`"${query}"`)}&maxperpage=100`;
+    console.log(uri);
+    rp.get({
+        uri: uri,
+        json: true
+    }).then(data => {
+        if (data.records.length === 0) {
+            onSucces([{
+                responseType: "typing",
+                responseDelay: 0,
+                typeDelay: 1000,
+            }, {
+                responseType: "text",
+                responseDelay: 500,
+                responseText: `Ik heb helaas geen afbeeldingen gevonden voor '${query}'`
+            }]);
+        } else {
+            let images = [];
+            const amount = data.records.length > 2 ? 3 : data.records.length;
+            for (let i = 0; i < amount; i++) {
+                const resultIdx = parseInt(Math.random() * (data.records.length - 1), 10);
+                const result = data.records[resultIdx];
+                const title = typeof result.title === 'string' ? result.title : result.title[0];
+
+                imageByDidl(result, (imgSrc) => {
+                    images.push({
+                        title: title,
+                        image_url: imgSrc
+                    });
+                    if (images.length === amount) {
+                        onSucces([{
+                            responseType: "typing",
+                            responseDelay: 0,
+                            typeDelay: 2000,
+                        }, {
+                            responseType: "imageCarousel",
+                            responseDelay: 0,
+                            images: images
+                        }])
+                    }
+                })
+            }
+
+
+        }
+    }).catch(data => {
+        onSucces([{
+            responseType: "typing",
+            responseDelay: 0,
+            typeDelay: 1000,
+        }, {
+            responseType: "text",
+            responseDelay: 1000,
+            responseText: `Ik heb helaas geen afbeeldingen gevonden voor '${query}'`
+        }]);
+    });
+/*    onSucces([{
+        responseType: "imageCarousel",
+        responseDelay: 0,
+        images: [
+            {title: "foo", image_url: "https://unsplash.it/200/300/"},
+            {title: "bar", image_url: "https://unsplash.it/200/300/"}
+        ]
+    }])*/
+};
+
 const surpise = ({payload, params, onSucces}) => {
     const page = parseInt(Math.random() * 900, 10);
     const [ collection ] = params;
@@ -50,11 +118,10 @@ const surpise = ({payload, params, onSucces}) => {
                 }, {
                     responseType: "typing",
                     responseDelay: 0,
-                    typeDelay: 3000,
-                    url: imgSrc
+                    typeDelay: 2000,
                 }, {
                     responseType: "url",
-                    responseDelay: 3000,
+                    responseDelay: 2100,
                     responseText: `Je ziet: ${title}`,
                     url: `http://geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
                 }, {
@@ -71,8 +138,7 @@ const surpise = ({payload, params, onSucces}) => {
                 }
             ])
         });
-
     }).catch(data => {console.log(data); onSucces([])})
 };
 
-module.exports = { surpise }
+module.exports = { surpise, search }

@@ -5,6 +5,7 @@ import TextAnswer from "./answers/text";
 import ButtonAnswer from "./answers/buttons";
 import ImageAnswer from "./answers/image";
 import UrlAnswer from "./answers/url";
+import CarouselAnswer from "./answers/carousel";
 
 const START_CONV_ID = "__start_conversation__";
 
@@ -20,6 +21,7 @@ const answerMap = {
     sendButtonMessage: (props) => <ButtonAnswer {...props} />,
     sendURL: (props) => <UrlAnswer {...props} />,
     sendImageMessage: (props) => <ImageAnswer {...props} />,
+    sendImageCarousel: (props) => <CarouselAnswer {...props} />,
     userMessage: (props) => (<div key={props.key} className="text-right">
         <span className="label label-primary">
             {props.responseText}
@@ -66,7 +68,8 @@ class ChatEmulator extends React.Component {
                 buttons: (response.responseData.buttons || []).map(b => ({
                     text: b.title,
                     id: b.payload
-                }))
+                })),
+                images: (response.responseData.images || [])
             }))
             : <div className="text-center" style={{color: "#999"}}>{greeting}</div>;
 

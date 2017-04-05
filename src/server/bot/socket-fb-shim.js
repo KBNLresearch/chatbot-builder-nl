@@ -45,6 +45,14 @@ module.exports = (webSocket) => {
         }
     }));
 
+    const sendImageCarousel = (recipientID, images) => sendData(JSON.stringify({
+        type: 'sendImageCarousel',
+        recipientID: recipientID,
+        data: {
+            images: images
+        }
+    }));
+
     return {
         sendTypingOn: sendTypingOn,
         sendTypingOff: sendTypingOff,
@@ -52,5 +60,6 @@ module.exports = (webSocket) => {
         sendButtonMessage: sendButtonMessage,
         sendTextMessage: sendTextMessage,
         sendImageMessage: sendImageMessage,
+        sendImageCarousel: sendImageCarousel
     };
 };

@@ -17,12 +17,17 @@ const register = (recipientID, params, res) => {
     }]));
 };
 
-const surprise = (payload, params,res) => {
+const surprise = (payload, params, res) => {
 
     gvn.surpise({payload: payload, params: params, onSucces: (answers) => {
         res.end(JSON.stringify(answers));
     }});
+};
 
+const search = (payload, params, { query }, res) => {
+    gvn.search({payload: payload, params: params, query: query, res: res, onSucces: (answers) => {
+        res.end(JSON.stringify(answers));
+    }})
 };
 
 app.post('/', (req, res) => {
@@ -33,6 +38,8 @@ app.post('/', (req, res) => {
             return register(recipientID, params, res);
         case "surprise":
             return surprise(payload, params, res);
+        case "search":
+            return search(payload, params, req.query, res);
     }
 
     res.end(JSON.stringify([]));

@@ -255,8 +255,6 @@ module.exports = (config) => {
      *
      */
     function sendImageMessage(recipientId, url) {
-        url = `${url}`;
-
         callSendAPI({
             recipient: {
                 id: recipientId
@@ -270,6 +268,23 @@ module.exports = (config) => {
                 }
             }
         });
+    }
+
+    function sendImageCarousel(recipientId, images) {
+        callSendAPI({
+            recipient: {
+                id: recipientId
+            },
+            message: {
+                attachment: {
+                    type: "template",
+                    payload: {
+                        template_type: "generic",
+                        elements: images /* [{title: "asd", image_url: "ads"}, {...}, ...]*/
+                    }
+                }
+            }
+        })
     }
 
     /*
@@ -352,6 +367,7 @@ module.exports = (config) => {
         sendButtonMessage: sendButtonMessage,
         sendTextMessage: sendTextMessage,
         sendImageMessage: sendImageMessage,
+        sendImageCarousel: sendImageCarousel,
         receivedDeliveryConfirmation: receivedDeliveryConfirmation,
         receivedMessageRead: receivedMessageRead,
         receivedMessage: receivedMessage,
