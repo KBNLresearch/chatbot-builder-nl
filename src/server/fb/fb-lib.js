@@ -280,7 +280,7 @@ module.exports = (config) => {
                     type: "template",
                     payload: {
                         template_type: "generic",
-                        elements: images /* [{title: "asd", image_url: "ads"}, {...}, ...]*/
+                        elements: images.map(({image_url, title, url}) => ({image_url: image_url, title: title, default_action: {type: "web_url", url: url}}))
                     }
                 }
             }

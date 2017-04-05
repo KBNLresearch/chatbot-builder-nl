@@ -10,11 +10,11 @@ class CarouselAnswer extends React.Component {
                 <i>(na {responseDelay} milliseconden)</i>
                 <div style={{width: "100%", overflowX: "auto"}}>
                     <div style={{width: "8000px"}}>
-                        {images.map(({image_url: url, title}) => (
-                            <span style={{display: "block", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden", float: "left", marginLeft: "10px", maxWidth: "300px", maxHeight: "328px"}}>
-                                <img src={url} style={{maxWidth: "100%", maxHeight: "300px"}} /><br />
+                        {images.map(({image_url: imgSrc, title, url}, i) => (
+                            <a target="_blank" href={url} key={i} style={{display: "block", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden", float: "left", marginLeft: "10px", maxWidth: "300px", maxHeight: "328px"}}>
+                                <img src={imgSrc} style={{maxWidth: "100%", maxHeight: "300px"}} /><br />
                                 {title}
-                            </span>
+                            </a>
                         ))}
                     </div>
                 </div>

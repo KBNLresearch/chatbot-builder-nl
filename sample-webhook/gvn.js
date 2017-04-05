@@ -53,7 +53,8 @@ const search = ({payload, params, query, res, onSucces}) => {
                 imageByDidl(result, (imgSrc) => {
                     images.push({
                         title: title,
-                        image_url: imgSrc
+                        image_url: `http://imageviewer.kb.nl/ImagingService/imagingService?id=${encodeURIComponent(imgSrc)}&useresolver=false&w=500&x=0&y=0&h=260&zoom=1`,
+                        url: `http://geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
                     });
                     if (images.length === amount) {
                         onSucces([{
