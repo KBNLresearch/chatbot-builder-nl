@@ -46,6 +46,7 @@ const search = (payload, params, { query }, res) => {
 app.post('/', (req, res) => {
     const { body: { payload, params, recipientID }, query: {operation}  } = req;
 
+    console.log("webhook reached: ", operation, recipientID);
     switch (operation) {
         case "unregister":
             return unregister(recipientID, res);

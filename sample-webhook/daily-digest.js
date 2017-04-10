@@ -21,15 +21,16 @@ const listRegistrations = () => {
 };
 
 const register = (recipientID, time) => {
-    if (typeof recipientID === 'number') {
+    console.log(recipientID, typeof recipientID);
+    if (`${recipientID}`.match(/^[0-9]+$/)) {
         saveRegistrations(listRegistrations()
             .filter(r => r.recipientID !== recipientID)
-            .concat({recipientID: recipientID, time: time}));
+            .concat({recipientID: `${recipientID}`, time: time}));
     }
 };
 
 const unregister = (recipientID) =>
-    saveRegistrations(listRegistrations().filter(r => r.recipientID !== recipientID));
+    saveRegistrations(listRegistrations().filter(r => r.recipientID !== `${recipientID}`));
 
 const sendDigest = (time) =>
     listRegistrations().filter(r => r.time === time).forEach(r => {
