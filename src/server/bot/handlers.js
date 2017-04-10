@@ -74,7 +74,36 @@ const matchBoundVariables = (dialogAnalysis, messageAnalysis) => {
 
 module.exports = (fb) => {
 
-    const handleAnswers = (senderID, dialogId, answers, bindVars =[]) => {
+    const handleWebhookAnswer = (url, senderID, dialogId, answerId, bindVars = []) => {
+        rp.post({
+            uri: applyBindVars(url, bindVars, encodeURIComponent),
+            json: true,
+            body: {
+                payload: [dialogId, answerId].join("|"),
+                params: bindVars,
+                recipientID: senderID
+            }
+        }).catch(() => {
+            fb.sendURL(senderID,
+                "https://github.com/KBNLresearch/chatbot-builder-nl",
+                `De webhook ${url} lijkt niet goed te werken.`
+            );
+            console.error(`Failed reach webhook at ${answer.url}`);
+        }).then((returnedAnswers) => {
+            try {
+                handleAnswers(senderID, dialogId, returnedAnswers);
+            } catch (e) {
+                fb.sendURL(senderID,
+                    "https://github.com/KBNLresearch/chatbot-builder-nl",
+                    `De webhook ${url} lijkt niet goed te werken.`
+                );
+                console.error(`Failed to use returned answers from webhook at ${answer.url}`, e)
+            }
+        });
+    }
+
+
+    const handleAnswers = (senderID, dialogId, answers, bindVars = []) => {
         let curDelay = 0;
         answers.forEach(answer => {
             curDelay += answer.responseDelay;
@@ -112,33 +141,7 @@ module.exports = (fb) => {
                         }));
 
                     case "webhook":
-                        return rp.post({
-                            uri: applyBindVars(answer.url, bindVars, encodeURIComponent),
-                            json: true,
-                            body: {
-                                payload: [dialogId, answer.id].join("|"),
-                                params: bindVars,
-                                recipientID: senderID
-                            }
-                        })
-                        .catch(() => {
-                            fb.sendURL(senderID,
-                                "https://github.com/KBNLresearch/chatbot-builder-nl",
-                                `De webhook ${answer.url} lijkt niet goed te werken.`
-                            );
-                            console.error(`Failed reach webhook at ${answer.url}`);
-                        })
-                        .then((returnedAnswers) => {
-                            try {
-                                handleAnswers(senderID, dialogId, returnedAnswers);
-                            } catch (e) {
-                                fb.sendURL(senderID,
-                                    "https://github.com/KBNLresearch/chatbot-builder-nl",
-                                    `De webhook ${answer.url} lijkt niet goed te werken.`
-                                );
-                                console.error(`Failed to use returned answers from webhook at ${answer.url}`, e)
-                            }
-                        })
+                        return handleWebhookAnswer(answer.url, senderID, dialogId, answer.id, bindVars);
                 }
             }, curDelay);
             curDelay += answer.responseType === "typing" ? answer.typeDelay : 0;
@@ -179,6 +182,11 @@ module.exports = (fb) => {
             sendCallToAction(senderID);
         } else {
             const [dialogId, parentId, ...bindVars] = payload.split("|");
+
+            if (dialogId === 'webhook') {
+                return handleWebhookAnswer(parentId, senderID, dialogId, parentId, bindVars);
+            }
+
             const dialog = dialogs.listDialogs().find(d => d.id === dialogId);
             if (typeof dialog === 'undefined') {
                 return;

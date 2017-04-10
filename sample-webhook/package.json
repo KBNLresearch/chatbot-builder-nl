@@ -13,7 +13,7 @@
     "express": "^4.13.4",
     "request": "^2.72.0",
     "request-promise": "^4.1.1",
-    "chatbot-builder-nl": "https://github.com/kbnlresearch/chatbot-builder-nl.git#986e90a7f24ed8fab1ab9c3590a134d5d6d62f6a"
+    "chatbot-builder-nl": "https://github.com/kbnlresearch/chatbot-builder-nl.git#4250e94302c25137a69309a38cb49a518b642c30"
   },
   "engines": {
     "node": "^6.9.4"

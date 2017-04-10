@@ -2,7 +2,7 @@ const fs = require("fs"),
     uuid = require("uuid"),
     rp = require("request-promise");
 
-const fileDir = "./files";
+const fileDir = process.env.FILE_DIR || "./files";
 const dialogFile = `${fileDir}/dialogs.json`;
 const greetingFile = `${fileDir}/greeting.txt`;
 

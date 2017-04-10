@@ -2,6 +2,7 @@ const chatbot = require("chatbot-builder-nl");
 const gvn = require("./gvn");
 const CronJob = require('cron').CronJob;
 
+/*
 
 const test = new CronJob({
     cronTime: '00 59 08 * * *',
@@ -10,13 +11,10 @@ const test = new CronJob({
         console.log("testing")
     }
 });
-console.log("hello?");
 test.start();
 
 
-console.log(chatbot);
-
-/*
-gvn.surpise({payload: "", params: [], onSucces: (answers) =>
-    chatbot.handlers.han
-})*/
+gvn.surpise({payload: `webhook|${process.env.PROXY_A_WEBHOOK}?operation=surprise`, params: [], onSucces: (answers) =>
+    chatbot.handlers.handleAnswers(1397278930293852, "webhook", answers) /!*senderID, dialogId, answers, bindVars =[]*!/
+});
+*/

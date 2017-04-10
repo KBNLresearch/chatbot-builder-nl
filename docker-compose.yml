@@ -6,6 +6,8 @@ services:
     ports:
       - "5000:5000"
     env_file: .env
+    volumes:
+      - ./files:/files
   nlp:
     image: renevanderark/chatbot-builder-nlp
   sample_webhook:
@@ -13,3 +15,5 @@ services:
     env_file: .env
     ports:
       - "5002:5002"
+    volumes:
+      - ./files:/files
