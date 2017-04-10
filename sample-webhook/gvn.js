@@ -83,14 +83,6 @@ const search = ({payload, params, query, res, onSucces}) => {
             responseText: `Ik heb helaas geen afbeeldingen gevonden voor '${query}'`
         }]);
     });
-/*    onSucces([{
-        responseType: "imageCarousel",
-        responseDelay: 0,
-        images: [
-            {title: "foo", image_url: "https://unsplash.it/200/300/"},
-            {title: "bar", image_url: "https://unsplash.it/200/300/"}
-        ]
-    }])*/
 };
 
 const surpise = ({payload, params, onSucces}) => {
