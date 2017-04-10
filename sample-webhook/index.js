@@ -1,9 +1,10 @@
-require('./daily-digest');
+
 
 const
     bodyParser = require('body-parser'),
     express = require('express'),
-    gvn = require('./gvn');
+    gvn = require('./gvn'),
+    dailyDigest = require('./daily-digest');
 
 const app = express();
 app.set('port', process.env.PORT || 5002);
@@ -11,13 +12,23 @@ app.use(bodyParser.json());
 
 const register = (recipientID, params, res) => {
     const [_, time] = params;
-    console.log(`TODO: register ${recipientID} at ${time}`);
+    dailyDigest.register(recipientID, time);
     res.end(JSON.stringify([{
         responseType: "text",
         responseDelay: 500,
         responseText: `Dank je wel. Vanaf nu stuur ik je elke dag om ${time} een afbeelding uit het Geheugen van Nederland.`
     }]));
 };
+
+const unregister = (recipientID, res) => {
+    dailyDigest.unregister(recipientID);
+    res.end(JSON.stringify([{
+        responseType: "text",
+        responseDelay: 500,
+        responseText: `Dank je wel. Vanaf nu stuur ik je geen afbeeldingen meer.`
+    }]));
+};
+
 
 const surprise = (payload, params, res) => {
 
@@ -36,6 +47,8 @@ app.post('/', (req, res) => {
     const { body: { payload, params, recipientID }, query: {operation}  } = req;
 
     switch (operation) {
+        case "unregister":
+            return unregister(recipientID, res);
         case "register":
             return register(recipientID, params, res);
         case "surprise":
