@@ -10,5 +10,6 @@ services:
     image: renevanderark/chatbot-builder-nlp
   sample_webhook:
     image: renevanderark/chatbot-builder-sample-webhook
+    env_file: .env
     ports:
       - "5002:5002"

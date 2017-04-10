@@ -193,6 +193,6 @@ module.exports = (fb) => {
     return {
         onAttachments: onAttachments,
         onPostback: onPostback,
-        onTextMessage: onTextMessage
+        onTextMessage: onTextMessage,
     }
 };

@@ -1,3 +1,5 @@
+require('./daily-digest');
+
 const
     bodyParser = require('body-parser'),
     express = require('express'),
