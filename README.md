@@ -1,5 +1,6 @@
 # Chatbot builder (nl)
 
+
 ## Docker quickstart
 
 Deze instructie start de tool in uitprobeer (mock) modus. Voor volledige installatie zie de instructie in de volgende sectie
