@@ -1,11 +1,25 @@
 # Chatbot builder (nl)
 
 
-## Docker quickstart
+## Docker quickstart (command line, mac en linux)
 
-Deze instructie start de tool in uitprobeer (mock) modus. Voor volledige installatie zie de instructie in de volgende sectie
+Deze instructie start de tool in uitprobeer (mock) modus. Voor volledige installatie zie de instructie in de volgende sectie.
 
-Maak een file aan genaamd ```.env``` met de volgende inhoud:
+Installeer [docker](https://docs.docker.com/engine/installation/).
+
+Open een terminal en maak een nieuwe directory aan, bijvoorbeeld:
+```sh
+$ mkdir chatbot-builder-nl
+$ cd chatbot-builder-nl
+```
+
+Download de [docker-compose.yml](https://raw.githubusercontent.com/KBNLresearch/chatbot-builder-nl/master/docker-compose.yml) file naar deze directory, of gebruik wget vanaf de command line.
+
+```sh
+$ wget https://raw.githubusercontent.com/KBNLresearch/chatbot-builder-nl/master/docker-compose.yml
+```
+
+Maak in dezelfde directory een file aan genaamd ```.env``` met de volgende inhoud:
 ```sh
 FROG=http://nlp:5001/
 PORT=5000
@@ -13,7 +27,7 @@ MODE=mock
 SERVER_URL=http://localhost:5000
 ```
 
-Start met [docker-compose](https://docs.docker.com/compose/install/)
+Start met [docker-compose](https://docs.docker.com/compose/install/).
 ```sh
 $ docker-compose up 
 ```
