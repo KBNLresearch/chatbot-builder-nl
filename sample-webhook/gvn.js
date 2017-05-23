@@ -1,5 +1,7 @@
 const rp = require("request-promise"),
-    GVN_URL = "http://geheugenvannederland.nl/nl/api";
+    GVN_URL = "http://geheugenvannederland.nl/nl/api",
+    randomCollection = require("./collections").randomCollection,
+    randomCollections = require("./collections").randomCollections;
 
 const imageByDidl = (result, callback) => {
 
@@ -26,7 +28,8 @@ const stripPayload = (payload) => {
 
 
 const search = ({payload, params, query, res, onSucces}) => {
-    const uri = `${GVN_URL}/results?coll=ngvn&query=${encodeURIComponent(`"${query}"`)}&maxperpage=100`;
+    const uri =`${GVN_URL}/results?coll=ngvn&query=${encodeURIComponent(`"${query}"`)}&maxperpage=10&${randomCollections().map((c) =>
+        `facets[collectionStringNL][]=${encodeURIComponent(c)}`).join("&")}`;
     console.log(uri);
     rp.get({
         uri: uri,
@@ -88,9 +91,7 @@ const search = ({payload, params, query, res, onSucces}) => {
 const surpise = ({payload, params, onSucces}) => {
     const page = parseInt(Math.random() * 900, 10);
     const [ collection ] = params;
-    const query = collection
-        ? `&facets[collectionStringNL][]=${encodeURIComponent(collection)}&maxperpage=50`
-        : `&query=isShowPiece%20exact%20%221%22&&page=${page}&maxperpage=1`;
+    const query = `&facets[collectionStringNL][]=${encodeURIComponent(collection || randomCollection())}&maxperpage=100`;
     const uri = `${GVN_URL}/results?coll=ngvn&${query}`;
     console.log(uri);
     rp.get({
