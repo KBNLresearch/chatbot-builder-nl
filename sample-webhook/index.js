@@ -11,7 +11,7 @@ app.set('port', process.env.PORT || 5002);
 app.use(bodyParser.json());
 
 const register = (recipientID, params, res) => {
-    const [_, time] = params;
+    const [_a, _b, time] = params;
     dailyDigest.register(recipientID, time);
     res.end(JSON.stringify([{
         responseType: "text",

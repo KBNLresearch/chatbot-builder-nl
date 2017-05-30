@@ -61,9 +61,9 @@ new CronJob({
 }).start();
 
 new CronJob({
-    cronTime: '00 00 19 * * *',
+    cronTime: '00 00 17 * * *',
     timeZone: "Europe/Amsterdam",
-    onTick: () => sendDigest('19.00 uur')
+    onTick: () => sendDigest('17.00 uur')
 }).start();
 
 module.exports = { register, unregister };
