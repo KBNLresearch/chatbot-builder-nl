@@ -9,7 +9,10 @@ const registrationsFile = `${fileDir}/registrations.json`;
 const saveRegistrations = (registrations) => {
     console.log("saving", registrations)
     if (!fs.existsSync(fileDir)) { fs.mkdirSync(fileDir); }
+
     fs.writeFileSync(registrationsFile, JSON.stringify(registrations));
+    const fd = fs.openSync(registrationsFile, "r+");
+    fs.fsyncSync(fd);
 };
 
 const listRegistrations = () => {

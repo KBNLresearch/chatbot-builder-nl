@@ -49,11 +49,15 @@ const makeNewAnswer = (data, parentId = null) => ({
 const saveDialogs = (dialogs) => {
     if (!fs.existsSync(fileDir)) { fs.mkdirSync(fileDir); }
     fs.writeFileSync(dialogFile, JSON.stringify(dialogs));
+    const fd = fs.openSync(dialogFile, "r+");
+    fs.fsyncSync(fd);
 };
 
 const saveGreeting = (greeting) => {
     if (!fs.existsSync(fileDir)) { fs.mkdirSync(fileDir); }
     fs.writeFileSync(greetingFile, greeting);
+    const fd = fs.openSync(greetingFile, "r+");
+    fs.fsyncSync(fd);
 };
 
 const loadGreeting = () => {
