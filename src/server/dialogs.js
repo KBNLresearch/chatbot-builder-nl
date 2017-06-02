@@ -51,6 +51,7 @@ const saveDialogs = (dialogs) => {
     fs.writeFileSync(dialogFile, JSON.stringify(dialogs));
     const fd = fs.openSync(dialogFile, "r+");
     fs.fsyncSync(fd);
+    fs.closeSync(fd);
 };
 
 const saveGreeting = (greeting) => {
@@ -58,6 +59,7 @@ const saveGreeting = (greeting) => {
     fs.writeFileSync(greetingFile, greeting);
     const fd = fs.openSync(greetingFile, "r+");
     fs.fsyncSync(fd);
+    fs.closeSync(fd);
 };
 
 const loadGreeting = () => {

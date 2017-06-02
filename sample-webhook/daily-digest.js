@@ -13,6 +13,7 @@ const saveRegistrations = (registrations) => {
     fs.writeFileSync(registrationsFile, JSON.stringify(registrations));
     const fd = fs.openSync(registrationsFile, "r+");
     fs.fsyncSync(fd);
+    fs.closeSync(fd);
 };
 
 const listRegistrations = () => {
