@@ -3,3 +3,4 @@ chatbot-builder-nl.iml
 node_modules/
 npm-debug.log
 .env
+nlp/*.pyc
