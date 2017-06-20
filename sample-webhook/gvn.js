@@ -1,5 +1,5 @@
 const rp = require("request-promise"),
-    GVN_URL = "http://geheugenvannederland.nl/nl/api",
+    GVN_URL = "http://www.geheugenvannederland.nl/nl/api",
     randomCollection = require("./collections").randomCollection,
     randomCollections = require("./collections").randomCollections;
 
