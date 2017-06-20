@@ -57,7 +57,7 @@ const search = ({payload, params, query, res, onSucces}) => {
                     images.push({
                         title: title,
                         image_url: `http://imageviewer.kb.nl/ImagingService/imagingService?id=${encodeURIComponent(imgSrc)}&useresolver=false&w=500&x=0&y=0&h=260&zoom=1`,
-                        url: `http://geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
+                        url: `http://www.geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
                     });
                     if (images.length === amount) {
                         onSucces([{
@@ -117,7 +117,7 @@ const surpise = ({payload, params, onSucces}) => {
                     responseType: "url",
                     responseDelay: 2100,
                     responseText: `Je ziet: ${title}`,
-                    url: `http://geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
+                    url: `http://www.geheugenvannederland.nl/nl/geheugen/view?identifier=${encodeURIComponent(result.recordIdentifier)}`
                 }, {
                     responseType: "buttons",
                     responseDelay: 1000,
