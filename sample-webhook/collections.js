@@ -24,13 +24,17 @@ const collections = [
     "Atlassen uit het Scheepvaartmuseum",
     "Koloniale Wereldtentoonstellingen.",
     "Kamptekeningen uit bezet Nederlands-Indië (1942-1945)",
+    "Fotocollectie Het Leven (1906-1941)",
+    "Fotografen De Spaarnestad",
+    "Olympische Spelen in Nederland (1928)",
+    "Wiel van der Randen",
 ];
 
 
 const randomCollection = () =>
-    collections[parseInt(Math.random() * (collections.length - 1), 10)];
+    collections[parseInt(Math.random() * collections.length , 10)];
 
-const randomCollections = (amount = 5) => {
+const randomCollections = (amount = collections.length) => {
     let out = [];
     for (let i = 0; i < amount; i++) {
         while (out.length < i + 1) {

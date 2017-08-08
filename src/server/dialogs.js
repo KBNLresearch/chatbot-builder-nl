@@ -18,7 +18,6 @@ const transformAnalysis = (tagResponse) =>
                 exact: exact,
                 norm: norm,
                 form: form,
-                pos: pos,
                 selected: form.indexOf("N") === 0 || form === "UH"
             }
         });

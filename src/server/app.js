@@ -44,12 +44,12 @@ app.use((req, res, next) => {
 
 app.ws("/chat-socket", (ws) =>
     ws.on("message", (msg) => {
+
         if (msg === "* ping! *") { return; }
         try {
             const socketFbShim = require("./bot/socket-fb-shim")(ws);
             const socketBotHandlers = require("./bot/handlers")(socketFbShim);
             const {type, senderID, data} = JSON.parse(msg);
-
             if (type === 'text') {
                 socketBotHandlers.onTextMessage(data, senderID);
             } else if (type === 'postback') {
